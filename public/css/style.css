@@ -502,7 +502,7 @@ section {
 }
 
 .timeline-details li::before {
-  content: '�?;
+  content: '•';
   position: absolute;
   left: 0;
   top: 0;
@@ -583,7 +583,7 @@ section {
 }
 
 .project-details li::before {
-  content: '�?;
+  content: '•';
   position: absolute;
   left: 0;
   top: 0;
