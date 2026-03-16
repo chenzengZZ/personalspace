@@ -5,16 +5,16 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const port = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'public/uploads');
+    cb(null, path.join(__dirname, 'public/uploads'));
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + path.extname(file.originalname));
@@ -23,11 +23,12 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-if (!fs.existsSync('public/uploads')) {
-  fs.mkdirSync('public/uploads', { recursive: true });
+const uploadsDir = path.join(__dirname, 'public/uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
-const dataFile = 'data.json';
+const dataFile = path.join(__dirname, 'data.json');
 let data = {};
 
 if (fs.existsSync(dataFile)) {
@@ -62,12 +63,4 @@ app.post('/admin/contact', (req, res) => {
   res.redirect('/admin');
 });
 
-// 本地开发时使用
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(port, () => {
-    console.log(`服务器运行在 http://localhost:${port}`);
-  });
-}
-
-// Vercel 需要使用 module.exports
 module.exports = app;
