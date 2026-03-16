@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理后台</title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <nav class="admin-nav">
+    <div class="container">
+      <h1>管理后台</h1>
+      <a href="/" class="back-link">返回首页</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- 个人介绍管理 -->
+    <section class="admin-section">
+      <h2>个人介绍管理</h2>
+      <form action="/admin/intro" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="title">标题</label>
+          <input type="text" id="title" name="title" value="<%= data.intro.title %>" required>
+        </div>
+        <div class="form-group">
+          <label for="content">内容</label>
+          <textarea id="content" name="content" rows="5" required><%= data.intro.content %></textarea>
+        </div>
+        <div class="form-group">
+          <label for="image">图片</label>
+          <input type="file" id="image" name="image">
+          <% if (data.intro.image) { %>
+          <img src="<%= data.intro.image %>" alt="当前图片" class="current-image">
+          <% } %>
+        </div>
+        <button type="submit" class="btn">保存</button>
+      </form>
+    </section>
+
+    <!-- 文章管理 -->
+    <section class="admin-section">
+      <h2>文章管理</h2>
+      
+      <!-- 添加文章 -->
+      <div class="add-article">
+        <h3>添加文章</h3>
+        <form action="/admin/article/add" method="POST">
+          <div class="form-group">
+            <label for="article-title">标题</label>
+            <input type="text" id="article-title" name="title" required>
+          </div>
+          <div class="form-group">
+            <label for="article-content">内容</label>
+            <textarea id="article-content" name="content" rows="5" required></textarea>
+          </div>
+          <button type="submit" class="btn">添加</button>
+        </form>
+      </div>
+
+      <!-- 文章列表 -->
+      <div class="articles-list">
+        <h3>文章列表</h3>
+        <% data.articles.forEach(article => { %>
+        <div class="article-item">
+          <h4><%= article.title %></h4>
+          <p class="article-date"><%= article.date %></p>
+          <form action="/admin/article/edit/<%= article.id %>" method="POST" class="edit-form">
+            <div class="form-group">
+              <textarea name="content" rows="3" required><%= article.content %></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-sm">修改</button>
+              <a href="/admin/article/delete/<%= article.id %>" class="btn btn-sm btn-danger" onclick="return confirm('确定删除？');">删除</a>
+            </div>
+          </form>
+        </div>
+        <% }); %>
+      </div>
+    </section>
+  </div>
+
+  <footer class="admin-footer">
+    <div class="container">
+      <p>&copy; 2024 管理后台</p>
+    </div>
+  </footer>
+</body>
+</html>

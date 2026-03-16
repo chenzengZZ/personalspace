@@ -1,0 +1,207 @@
+/* 管理后台样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Courier New', monospace;
+  background-color: #0a0a0a;
+  color: #00ffea;
+  line-height: 1.6;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* 导航栏 */
+.admin-nav {
+  background-color: rgba(26, 26, 46, 0.9);
+  border-bottom: 1px solid #00ffea;
+  padding: 1rem 0;
+}
+
+.admin-nav .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-nav h1 {
+  font-size: 1.5rem;
+  color: #ff006e;
+  text-shadow: 0 0 10px #ff006e;
+}
+
+.back-link {
+  color: #00ffea;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border: 1px solid #00ffea;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.back-link:hover {
+  background-color: rgba(0, 255, 234, 0.1);
+  box-shadow: 0 0 10px rgba(0, 255, 234, 0.5);
+}
+
+/* 管理区域 */
+.admin-section {
+  margin: 2rem 0;
+  padding: 2rem;
+  background-color: rgba(26, 26, 46, 0.8);
+  border: 1px solid #00ffea;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 255, 234, 0.2);
+}
+
+.admin-section h2 {
+  font-size: 1.8rem;
+  color: #00ffea;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 10px #00ffea;
+}
+
+.admin-section h3 {
+  font-size: 1.3rem;
+  color: #ff006e;
+  margin: 1.5rem 0 1rem;
+  text-shadow: 0 0 5px #ff006e;
+}
+
+/* 表单样式 */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #00ffea;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: rgba(10, 10, 10, 0.8);
+  border: 1px solid #00ffea;
+  border-radius: 5px;
+  color: #e0e0e0;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  box-shadow: 0 0 10px rgba(0, 255, 234, 0.5);
+}
+
+.current-image {
+  max-width: 200px;
+  margin-top: 1rem;
+  border: 1px solid #00ffea;
+  border-radius: 5px;
+}
+
+/* 按钮样式 */
+.btn {
+  display: inline-block;
+  padding: 0.8rem 1.5rem;
+  background-color: rgba(0, 255, 234, 0.2);
+  border: 1px solid #00ffea;
+  border-radius: 5px;
+  color: #00ffea;
+  text-decoration: none;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  background-color: rgba(0, 255, 234, 0.3);
+  box-shadow: 0 0 10px rgba(0, 255, 234, 0.5);
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.btn-danger {
+  border-color: #ff006e;
+  color: #ff006e;
+  background-color: rgba(255, 0, 110, 0.2);
+}
+
+.btn-danger:hover {
+  background-color: rgba(255, 0, 110, 0.3);
+  box-shadow: 0 0 10px rgba(255, 0, 110, 0.5);
+}
+
+/* 文章列表 */
+.articles-list {
+  margin-top: 2rem;
+}
+
+.article-item {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: rgba(10, 10, 10, 0.6);
+  border: 1px solid #00ffea;
+  border-radius: 5px;
+}
+
+.article-item h4 {
+  font-size: 1.2rem;
+  color: #ff006e;
+  margin-bottom: 0.5rem;
+}
+
+.article-date {
+  font-size: 0.9rem;
+  color: #00ffea;
+  margin-bottom: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* 页脚 */
+.admin-footer {
+  background-color: rgba(26, 26, 46, 0.9);
+  border-top: 1px solid #00ffea;
+  padding: 1.5rem 0;
+  text-align: center;
+  margin-top: 3rem;
+  color: #00ffea;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .admin-section {
+    padding: 1.5rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
