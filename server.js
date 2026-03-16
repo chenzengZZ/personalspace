@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -62,6 +62,12 @@ app.post('/admin/contact', (req, res) => {
   res.redirect('/admin');
 });
 
-app.listen(port, () => {
-  console.log(`服务器运行在 http://localhost:${port}`);
-});
+// 本地开发时使用
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(port, () => {
+    console.log(`服务器运行在 http://localhost:${port}`);
+  });
+}
+
+// Vercel 需要使用 module.exports
+module.exports = app;
