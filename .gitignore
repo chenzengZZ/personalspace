@@ -1,4 +1,6 @@
-node_modules
-.env
+node_modules/
+.trae/
+.vscode/
+_temp/
 .DS_Store
 *.log

@@ -3,278 +3,346 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>马文多 - 产品运营专家</title>
+  <meta name="description" content="马文多 - 产品运营专家，具备完整的产品运营经验，擅长项目管理、需求管理与方案产出">
+  <meta name="theme-color" content="#000000">
+  <title>Wenduo Ma - Product Operations</title>
   <link rel="stylesheet" href="/css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <nav class="navbar">
-    <div class="nav-container">
-      <ul class="nav-menu">
-              <li><a href="#">HOME</a></li>
-              <li><a href="#experience">EXPERIENCE</a></li>
-              <li><a href="#projects">PROJECTS</a></li>
-              <li><a href="#contact">CONTACT</a></li>
-            </ul>
+  <a href="#main-content" class="skip-link">跳转到主要内容</a>
+  
+  <nav class="nav" role="navigation" aria-label="主导航">
+    <div class="container">
+      <a href="#" class="nav-logo">WENDUO<span>.</span></a>
+      <ul class="nav-links" role="menubar">
+        <li role="none"><a href="#experience" role="menuitem">Experience</a></li>
+        <li role="none"><a href="#projects" role="menuitem">Projects</a></li>
+        <li role="none"><a href="#skills" role="menuitem">Skills</a></li>
+        <li role="none"><a href="#education" role="menuitem">Education</a></li>
+        <li role="none"><a href="#favorites" role="menuitem">Favorites</a></li>
+        <li role="none"><a href="#contact" role="menuitem">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <label class="theme-toggle" aria-label="切换主题">
+          <input type="checkbox" id="theme-toggle">
+          <span class="theme-slider">
+            <svg class="theme-icon moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <svg class="theme-icon sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          </span>
+        </label>
+        <button class="nav-toggle" aria-label="打开菜单">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
     </div>
   </nav>
 
-  <section class="hero">
-    <div class="hero-content">
-      <div class="hero-image">
-        <div class="image-wrapper">
-          <img src="/uploads/profile_new.jpeg" alt="马文多">
+  <main id="main-content">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-text scroll-animate-left">
+            <span class="hero-badge">Product Operations Expert</span>
+            <h1 id="hero-title" class="hero-title">
+              Hey, I am<br><span class="highlight">Wenduo Ma</span>
+            </h1>
+            <p class="hero-subtitle">
+              逝者如斯，不舍昼夜
+            </p>
+            <div class="hero-cta">
+              <a href="#contact" class="btn btn-primary">Contact</a>
+              <a href="#experience" class="btn btn-secondary">About me</a>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="hero-text">
-        <div class="hero-badge">产品运营</div>
-        <h1 class="hero-title">
-          你好，我是<span class="highlight">马文多</span>
-        </h1>
-        <p class="hero-desc">具备完整的产品运营经验，擅长项目管理、需求管理与方案产出，在合规风控与质量管理领域有丰富实践经验。</p>
-        <div class="hero-actions">
-          <a href="#experience" class="btn btn-primary">工作经历</a>
-          <a href="#contact" class="btn btn-secondary">联系我</a>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="about" class="about-section">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-label">ABOUT ME</span>
-        <h2 class="section-title">关于我</h2>
-      </div>
-      <div class="about-grid">
-        <div class="about-card">
-          <div class="about-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-              <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-          </div>
-          <h3>产品全链路运营</h3>
-          <p>具备完整的产品运营经验，从需求分析、方案设计到落地复盘，实现全闭环管理</p>
+    <section id="experience" class="experience-section" aria-labelledby="experience-title">
+      <div class="container">
+        <div class="section-header scroll-animate">
+          <span class="section-label">Experience</span>
+          <h2 id="experience-title" class="section-title">工作经历</h2>
         </div>
-        <div class="about-card">
-          <div class="about-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="3" y1="9" x2="21" y2="9"></line>
-              <line x1="9" y1="21" x2="9" y2="9"></line>
-            </svg>
-          </div>
-          <h3>项目管理专家</h3>
-          <p>统筹跨业务线项目，协调多方资源，保障项目进度与交付质量</p>
-        </div>
-        <div class="about-card">
-          <div class="about-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-            </svg>
-          </div>
-          <h3>合规风控</h3>
-          <p>在合规风控与质量管理领域有丰富实践经验，降低业务风险</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="experience" class="experience-section">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-label">EXPERIENCE</span>
-        <h2 class="section-title">工作经历</h2>
-      </div>
-      <div class="timeline">
-        <div class="timeline-item">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <div class="timeline-header">
-              <div>
-                <h3 class="company-name">小红书</h3>
-                <p class="job-title">审核产品运营</p>
+        
+        <div class="timeline">
+          <div class="timeline-item scroll-animate">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-header">
+                <div class="timeline-company">
+                  <h3>小红书</h3>
+                  <span class="timeline-role">审核产品运营</span>
+                </div>
+                <span class="timeline-date">2024.01 - 2025.09</span>
               </div>
-              <span class="timeline-date">2024.01 - 2025.09</span>
+              <ul class="timeline-details">
+                <li>
+                  <strong>方案产出：</strong>主动挖掘业务痛点，开展跨场景深度调研，协同多方共识对齐，独立输出MRD等产品文档，推动需求从方案设计到落地复盘的全闭环
+                </li>
+                <li>
+                  <strong>项目管理：</strong>立足中台视角，聚焦业务共性问题，统筹制定整体项目方案，协调产研及多方资源推进落地，保障项目进度与交付质量
+                </li>
+                <li>
+                  <strong>需求管理：</strong>承接业务诉求，提供多元解决方案，梳理并整合产品需求，跟进落地闭环流程
+                </li>
+              </ul>
             </div>
-            <ul class="timeline-details">
-              <li>项目管理：立足中台视角，聚焦跨业务线共性问题，统筹制定整体项目方案，协调产研及多方资源推进落地，保障项目进度与交付质量</li>
-              <li>需求管理：承接业务实际诉求，提供多元解决方案，梳理并整合产品需求，联动多方对齐研发排期，跟进功能落地覆盖率与实际使用效果</li>
-              <li>方案产出：主动挖掘业务痛点，开展跨场景深度调研，协同多方共识对齐，独立输出MRD等产品文档，推动需求从方案设计到落地复盘的全闭环</li>
-            </ul>
           </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <div class="timeline-header">
-              <div>
-                <h3 class="company-name">小红书</h3>
-                <p class="job-title">审核规则与质量管理（管培轮岗）</p>
+          
+          <div class="timeline-item scroll-animate">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-header">
+                <div class="timeline-company">
+                  <h3>小红书</h3>
+                  <span class="timeline-role">审核规则运营（管培轮岗）</span>
+                </div>
+                <span class="timeline-date">2023.06 - 2024.01</span>
               </div>
-              <span class="timeline-date">2023.06 - 2024.01</span>
+              <ul class="timeline-details">
+                <li>
+                  <strong>规则运维：</strong>对标GR、PR、治理要求撰写、优化内容审核规则，推进规则落地校准与执行宣导
+                </li>
+                <li>
+                  <strong>质量管理：</strong>监控审核质量数据，对执行问题进行根因分析并输出报告，定位问题并与多方共识，推动问题解决促进质量目标达成
+                </li>
+              </ul>
             </div>
-            <ul class="timeline-details">
-              <li>审核规则运维：对标GR、PR、治理要求撰写、优化内容审核规则，推进规则落地校准与执行宣导</li>
-              <li>审核质量管理：监控审核质量数据，对执行问题进行根因分析并输出报告，定位问题并与多方共识，推动问题解决促进质量目标达成</li>
-            </ul>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="projects" class="projects-section">
+    <section id="projects" class="projects-section" aria-labelledby="projects-title">
+      <div class="container">
+        <div class="section-header scroll-animate">
+          <span class="section-label">Projects</span>
+          <h2 id="projects-title" class="section-title">项目经历</h2>
+        </div>
+        
+        <div class="projects-grid">
+          <article class="project-card scroll-animate">
+            <div class="project-header">
+              <h3 class="project-title">BPO结算线上化专项</h3>
+              <span class="project-date">2025.03 - 2025.08</span>
+            </div>
+            <p class="project-overview">
+              2025年公司扩大审核业务外发规模，原线下结算模式无法支撑增量，且存在账期过长以及合规风险，亟需搭建自动化结算系统替代手工流程。
+            </p>
+            <div class="project-details">
+              <div class="project-detail-item">
+                <span class="detail-label">方案产出</span>
+                <p>深度调研结算场景，梳理结算业务逻辑，推动结算数据建设，输出结算系统MRD，推动方案评审定稿</p>
+              </div>
+              <div class="project-detail-item">
+                <span class="detail-label">系统运维</span>
+                <p>收集20+条高频反馈，推动流程优化并搭建系统FAQ知识库；定位结算数据异常，比对异常样本定位3类口径问题</p>
+              </div>
+              <div class="project-detail-item">
+                <span class="detail-label">落地推广</span>
+                <p>制定并落地线上结算SOP，实现90%结算场景线上化</p>
+              </div>
+            </div>
+            <div class="project-results">
+              <div class="result-item">
+                <span class="result-value">61.6% → 100%</span>
+                <span class="result-label">数据准确率</span>
+              </div>
+              <div class="result-item">
+                <span class="result-value">35天 → 20天</span>
+                <span class="result-label">结算周期</span>
+              </div>
+              <div class="result-item">
+                <span class="result-value">0差错</span>
+                <span class="result-label">连续2个月</span>
+              </div>
+            </div>
+          </article>
+          
+          <article class="project-card scroll-animate">
+            <div class="project-header">
+              <h3 class="project-title">权限合规治理专项</h3>
+              <span class="project-date">2024.09 - 2025.01</span>
+            </div>
+            <p class="project-overview">
+              针对过往因权限漏洞引发的安全问题，协同内控、信安部门从产品&运营角度完成审核作业全系统的权限合规治理。
+            </p>
+            <div class="project-details">
+              <div class="project-detail-item">
+                <span class="detail-label">项目落地</span>
+                <p>重构岗位角色体系，统筹业务侧完整权限版本切换</p>
+              </div>
+              <div class="project-detail-item">
+                <span class="detail-label">机制沉淀</span>
+                <p>落地权限管理规范与全链路监控体系，建立长效运营机制，实现风险从事后堵漏到事前防控的升级</p>
+              </div>
+              <div class="project-detail-item">
+                <span class="detail-label">底线排查</span>
+                <p>全量风险走查业务系统，推动闭环高风险漏洞</p>
+              </div>
+            </div>
+            <div class="project-results">
+              <div class="result-item">
+                <span class="result-value">47%+</span>
+                <span class="result-label">角色精简率</span>
+              </div>
+              <div class="result-item">
+                <span class="result-value">6例</span>
+                <span class="result-label">P0级漏洞</span>
+              </div>
+              <div class="result-item">
+                <span class="result-value">11例</span>
+                <span class="result-label">P1级漏洞</span>
+              </div>
+            </div>
+          </article>
+          
+          <article class="project-card scroll-animate">
+            <div class="project-header">
+              <h3 class="project-title">审核人员管理工具专项</h3>
+              <span class="project-date">2024.01 - 2025.09</span>
+            </div>
+            <p class="project-overview">
+              公司审核产能较于竞品有较大提升空间，过往的人力管理无法实现过程监控，是工具+管理可以做功的重要环节。
+            </p>
+            <div class="project-details">
+              <div class="project-detail-item">
+                <span class="detail-label">需求挖掘&功能落地</span>
+                <p>深度调研竞品与业务痛点，实现审核员工作状态可视化与异动预警功能，将管理颗粒度从"次日回溯"到"分钟级干预"</p>
+              </div>
+              <div class="project-detail-item">
+                <span class="detail-label">业务提效&机制沉淀</span>
+                <p>与业务侧共创《值班管理制度》，通过"系统工具+管理SOP"双轮驱动</p>
+              </div>
+            </div>
+            <div class="project-results">
+              <div class="result-item">
+                <span class="result-value">5%</span>
+                <span class="result-label">人均产能提升</span>
+              </div>
+              <div class="result-item">
+                <span class="result-value">85%</span>
+                <span class="result-label">业务覆盖率</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills" class="skills-section" aria-labelledby="skills-title">
+      <div class="container">
+        <div class="section-header scroll-animate">
+          <span class="section-label">Skills</span>
+          <h2 id="skills-title" class="section-title">个人能力</h2>
+        </div>
+        
+        <div class="skills-content scroll-animate">
+          <div class="skills-tags">
+            <span class="skill-tag">产品全链路运营</span>
+            <span class="skill-tag">跨部门项目统筹</span>
+            <span class="skill-tag">审核全链路业务感知</span>
+          </div>
+          
+          <div class="certificates">
+            <h4 class="certificates-title">证书 & 语言</h4>
+            <div class="certificates-grid">
+              <span class="cert-tag">证券从业资格证</span>
+              <span class="cert-tag">基金从业资格证</span>
+              <span class="cert-tag">会计从业资格证</span>
+              <span class="cert-tag">计算机二级</span>
+              <span class="cert-tag">英语 CET-6</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="education" class="education-section" aria-labelledby="education-title">
+      <div class="container">
+        <div class="section-header scroll-animate">
+          <span class="section-label">Education</span>
+          <h2 id="education-title" class="section-title">教育背景</h2>
+        </div>
+        <div class="education-card scroll-animate-scale">
+          <div class="school-logo">
+            <img src="/uploads/ecnu-logo.svg" alt="华东师范大学校徽" loading="lazy" decoding="async">
+          </div>
+          <div class="school-info">
+            <h3>华东师范大学</h3>
+            <p class="degree">社会学 · 硕士</p>
+            <p class="year">2019.09 - 2023.06</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="favorites" class="interests-section" aria-labelledby="favorites-title">
+      <div class="container">
+        <div class="section-header scroll-animate">
+          <span class="section-label">Favorites</span>
+          <h2 id="favorites-title" class="section-title">打发时间</h2>
+        </div>
+        
+        <div class="bouncing-container scroll-animate" id="bouncing-container">
+          <canvas id="bouncing-canvas"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact-section" aria-labelledby="contact-title">
+      <div class="container">
+        <div class="section-header scroll-animate">
+          <span class="section-label">Contact</span>
+          <h2 id="contact-title" class="section-title">联系方式</h2>
+          <p class="section-subtitle">期待与你建立联系</p>
+        </div>
+        <div class="contact-grid">
+          <a href="tel:17546093021" class="contact-item scroll-animate" aria-label="拨打电话 17546093021">
+            <div class="contact-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+            </div>
+            <div class="contact-info">
+              <span class="contact-value">17546093021</span>
+            </div>
+          </a>
+          <a href="mailto:249612039@qq.com" class="contact-item scroll-animate" aria-label="发送邮件至 249612039@qq.com">
+            <div class="contact-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            </div>
+            <div class="contact-info">
+              <span class="contact-value">249612039@qq.com</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" role="contentinfo">
     <div class="container">
-      <div class="section-header">
-        <span class="section-label">PROJECTS</span>
-        <h2 class="section-title">项目经历</h2>
-      </div>
-      <div class="projects-grid">
-        <div class="project-card">
-          <div class="project-header">
-            <span class="project-role">PMO</span>
-            <span class="project-date">2025.03 - 2025.08</span>
-          </div>
-          <h3 class="project-title">BPO结算线上化专项</h3>
-          <ul class="project-details">
-            <li>牵头多BU调研，输出完整MRD，推动自动化结算系统上线</li>
-            <li>主导上线后数据异常根因定位与修复，实现连续2个月结算零差错</li>
-            <li>制定落地标准化对账SOP，同步完成系统功能优化与知识库搭建</li>
-          </ul>
-          <div class="project-metrics">
-            <div class="metric-item">
-              <span class="metric-value">100%</span>
-              <span class="metric-label">结算准确率</span>
-            </div>
-            <div class="metric-item">
-              <span class="metric-value">43%</span>
-              <span class="metric-label">周期压缩</span>
-            </div>
-          </div>
-        </div>
-        <div class="project-card">
-          <div class="project-header">
-            <span class="project-role">PMO</span>
-            <span class="project-date">2024.01 - 2025.09</span>
-          </div>
-          <h3 class="project-title">审核产能提升专项</h3>
-          <ul class="project-details">
-            <li>主导WFM系统从0到1搭建，负责核心模块全流程运营，覆盖2000+人，实现分钟级在线干预</li>
-            <li>联动产研优化任务分配策略与效率工具，工具覆盖率100%</li>
-            <li>迭代数据看板，将管理层复盘耗时压缩超50%</li>
-          </ul>
-          <div class="project-metrics">
-            <div class="metric-item">
-              <span class="metric-value">2000+</span>
-              <span class="metric-label">覆盖人数</span>
-            </div>
-            <div class="metric-item">
-              <span class="metric-value">10%</span>
-              <span class="metric-label">产能提升</span>
-            </div>
-          </div>
-        </div>
-        <div class="project-card">
-          <div class="project-header">
-            <span class="project-role">PMO</span>
-            <span class="project-date">2024.09 - 2025.01</span>
-          </div>
-          <h3 class="project-title">权限合规治理专项</h3>
-          <ul class="project-details">
-            <li>联动内控、信息安全部门开展全系统权限合规治理，完成全量风险走查</li>
-            <li>推动闭环6例PO级、11例P1级高风险漏洞，彻底解决敏感信息越权访问的合规隐患</li>
-            <li>重构岗位角色体系，落地权限管理规范与全链路监控体系，建立长效运营机制</li>
-          </ul>
-          <div class="project-metrics">
-            <div class="metric-item">
-              <span class="metric-value">47%</span>
-              <span class="metric-label">角色精简率</span>
-            </div>
-            <div class="metric-item">
-              <span class="metric-value">17</span>
-              <span class="metric-label">风险漏洞闭环</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <p class="footer-text">© 2026 Wenduo Ma · Made with passion</p>
     </div>
-  </section>
-
-  <section id="skills" class="skills-section">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-label">SKILLS</span>
-        <h2 class="section-title">技能与证书</h2>
-      </div>
-      <div class="skills-grid">
-        <div class="skill-category">
-          <div class="skill-tags">
-            <span class="skill-tag">证券从业资格证</span>
-            <span class="skill-tag">基金从业资格证</span>
-            <span class="skill-tag">会计从业资格证</span>
-            <span class="skill-tag">计算机二级</span>
-            <span class="skill-tag">英语 CET-6</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-
-  <section id="education" class="education-section">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-label">EDUCATION</span>
-        <h2 class="section-title">教育背景</h2>
-      </div>
-      <div class="education-card">
-        <div class="education-icon">
-          <img src="/uploads/ecnu-logo.svg" alt="华东师范大学校徽" style="width: 80px; height: 80px; object-fit: contain; border: none; background: transparent;">
-        </div>
-        <div class="education-info">
-          <h3>华东师范大学</h3>
-          <p class="education-major">社会学 · 硕士</p>
-          <p class="education-period">2019.09 - 2023.06</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="contact" class="contact-section">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-label">CONTACT</span>
-        <h2 class="section-title">联系方式</h2>
-      </div>
-      <div class="contact-grid">
-        <a href="tel:17546093021" class="contact-card">
-          <div class="contact-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-            </svg>
-          </div>
-          <p class="contact-label">电话</p>
-          <p class="contact-value">17546093021</p>
-        </a>
-        <a href="mailto:249612039@qq.com" class="contact-card">
-          <div class="contact-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-              <polyline points="22,6 12,13 2,6"></polyline>
-            </svg>
-          </div>
-          <p class="contact-label">邮箱</p>
-          <p class="contact-value">249612039@qq.com</p>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <footer class="footer">
-    <p>© 2026 | Wenduo Ma</p>
   </footer>
 
   <script src="/js/main.js"></script>
