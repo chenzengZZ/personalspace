@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Builder Decision Atlas</title>
+  <style>
+    :root {
+      --bg: #f5efe6;
+      --ink: #181512;
+      --muted: #655d55;
+      --card: rgba(255,255,255,0.72);
+      --line: rgba(24,21,18,0.12);
+      --accent: #d63031;
+      --blue: #326bff;
+      --gold: #8f6400;
+      --green: #0b8f62;
+      --shadow: 0 24px 60px rgba(29, 25, 20, 0.12);
+      --radius: 26px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Georgia", "Times New Roman", "PingFang SC", "Microsoft YaHei", serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top right, rgba(50,107,255,0.09), transparent 25%),
+        radial-gradient(circle at left top, rgba(214,48,49,0.08), transparent 24%),
+        linear-gradient(180deg, #f8f3eb 0%, #efe7dd 100%);
+    }
+    .wrap {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 28px 18px 48px;
+    }
+    .hero, .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+    .hero {
+      padding: 30px;
+      margin-bottom: 18px;
+    }
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: clamp(38px, 6vw, 78px);
+      letter-spacing: -0.06em;
+      line-height: 0.9;
+    }
+    .hero p {
+      margin: 0;
+      max-width: 960px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.85;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .card {
+      padding: 22px;
+      display: grid;
+      gap: 16px;
+    }
+    .eyebrow {
+      display: inline-block;
+      width: fit-content;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(24,21,18,0.06);
+    }
+    h2 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: -0.03em;
+    }
+    .tree {
+      display: grid;
+      gap: 12px;
+    }
+    .node {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.72);
+      padding: 14px 16px;
+    }
+    .node strong {
+      display: block;
+      font-size: 17px;
+      margin-bottom: 6px;
+    }
+    .node p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+    .node.red { border-left: 4px solid var(--accent); }
+    .node.blue { border-left: 4px solid var(--blue); }
+    .node.gold { border-left: 4px solid var(--gold); }
+    .node.green { border-left: 4px solid var(--green); }
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .mini {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.68);
+      border: 1px solid var(--line);
+    }
+    .mini h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+    .mini p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+    .footer {
+      margin-top: 18px;
+      padding: 18px 22px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.66);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    @media (max-width: 1024px) {
+      .grid, .mini-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="eyebrow">Decision Atlas</div>
+      <h1>当问题很多时，<br>先裁决，再推进。</h1>
+      <p>这不是知识点陈列，而是常用判断的快速图谱。它解决的不是“知道更多”，而是“现在最该怎么做”。</p>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <div class="eyebrow">Coding Gate</div>
+        <h2>我现在能开始写代码吗？</h2>
+        <div class="tree">
+          <div class="node red"><strong>目标清楚吗？</strong><p>如果这轮到底解决什么都说不清，先别写。</p></div>
+          <div class="node blue"><strong>最小闭环切出来了吗？</strong><p>如果任务还是大而全，就先缩小到可验证闭环。</p></div>
+          <div class="node green"><strong>边界和验收标准清楚吗？</strong><p>页面、数据、状态、风险和“不做项”都清楚了，才进入实现。</p></div>
+          <div class="node gold"><strong>结论</strong><p>只要前三条有一条不清，默认继续设计；三条都清楚，才写代码。</p></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="eyebrow">Thread Gate</div>
+        <h2>我要开新线程吗？</h2>
+        <div class="tree">
+          <div class="node red"><strong>目标换了吗？</strong><p>如果已经不是同一个明确目标，优先开新线程。</p></div>
+          <div class="node blue"><strong>风险层级换了吗？</strong><p>从本地闭环切到云端接入、支付、后台，通常值得新线程。</p></div>
+          <div class="node green"><strong>会不会让当前主链路失焦？</strong><p>如果会，就不要硬塞进当前线程。</p></div>
+          <div class="node gold"><strong>结论</strong><p>换目标，优先换线程；没换目标，只是局部深化，就留在线程内。</p></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="eyebrow">Window Gate</div>
+        <h2>我要开新窗口吗？</h2>
+        <div class="tree">
+          <div class="node red"><strong>当前上下文已经开始压判断了吗？</strong><p>如果明显发散、混层、负载过高，开新窗口隔离上下文。</p></div>
+          <div class="node blue"><strong>这是元认知还是执行问题？</strong><p>方法论讨论压住项目推进时，拆到新窗口更稳。</p></div>
+          <div class="node green"><strong>是否需要完全不同的工作模式？</strong><p>执行窗口和元认知窗口不要长期混用。</p></div>
+          <div class="node gold"><strong>结论</strong><p>不是一发散就开新窗口，而是当上下文已经影响质量时再开。</p></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="eyebrow">Agent Gate</div>
+        <h2>现在值得上多 agent 吗？</h2>
+        <div class="tree">
+          <div class="node red"><strong>目标清楚了吗？</strong><p>目标不清，多 agent 只会并行制造混乱。</p></div>
+          <div class="node blue"><strong>任务切开了吗？</strong><p>子任务必须可拆、边界清楚、写集不重叠。</p></div>
+          <div class="node green"><strong>结果能分别验收吗？</strong><p>没有独立验收标准，就不适合并行。</p></div>
+          <div class="node gold"><strong>结论</strong><p>单 agent 是默认，只有“清楚、可拆、低冲突、可验收”才值得多 agent。</p></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="eyebrow">Debug Gate</div>
+        <h2>查 bug 要不要全局扫描？</h2>
+        <div class="tree">
+          <div class="node red"><strong>症状清楚吗？</strong><p>预期、实际、复现步骤不清，就先别通扫。</p></div>
+          <div class="node blue"><strong>范围能缩吗？</strong><p>先缩到页面、模块、数据或云函数级。</p></div>
+          <div class="node green"><strong>局部链路查了吗？</strong><p>先急诊，后体检。局部查不出来，再扩大。</p></div>
+          <div class="node gold"><strong>结论</strong><p>默认排查顺序：先定症状，再缩范围，再查链路，最后全扫。</p></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="eyebrow">Idea Gate</div>
+        <h2>新的 idea 要立刻做吗？</h2>
+        <div class="tree">
+          <div class="node red"><strong>它和当前目标同一件事吗？</strong><p>如果不是，先别挤进当前链路。</p></div>
+          <div class="node blue"><strong>它是探索还是准备开工？</strong><p>很多好 idea 现在只该归档，不该立刻执行。</p></div>
+          <div class="node green"><strong>它有最小闭环吗？</strong><p>没有闭环定义，就暂时别消耗执行资源。</p></div>
+          <div class="node gold"><strong>结论</strong><p>新 idea 默认先归档，再裁决；不是新想法一来就开工。</p></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="footer">
+      <div class="mini-grid">
+        <div class="mini"><h3>第一原则</h3><p>先裁决，再推进；先收边界，再开工。</p></div>
+        <div class="mini"><h3>第二原则</h3><p>真正浪费的不是慢，而是方向不准还高速推进。</p></div>
+        <div class="mini"><h3>第三原则</h3><p>Builder 的强大，不是知道更多，而是更会决定现在不做什么。</p></div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

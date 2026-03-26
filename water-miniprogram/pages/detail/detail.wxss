@@ -1,0 +1,225 @@
+.container {
+  padding-bottom: 140rpx;
+  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.product-header {
+  position: relative;
+  width: 100%;
+  height: 600rpx;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+}
+
+.product-badge {
+  position: absolute;
+  top: 24rpx;
+  right: 24rpx;
+  background: linear-gradient(135deg, #E11D48 0%, #BE123C 100%);
+  color: #ffffff;
+  font-size: 22rpx;
+  padding: 10rpx 20rpx;
+  border-radius: 24rpx;
+  box-shadow: 0 4rpx 16rpx rgba(225, 29, 72, 0.35);
+}
+
+.product-content {
+  padding: 32rpx;
+  background: #ffffff;
+  border-radius: 32rpx 32rpx 0 0;
+  margin-top: -32rpx;
+  position: relative;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.04);
+}
+
+.product-title {
+  font-size: 38rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 16rpx;
+}
+
+.product-desc {
+  font-size: 26rpx;
+  color: #666666;
+  margin-bottom: 32rpx;
+  line-height: 1.6;
+}
+
+.product-meta {
+  display: flex;
+  gap: 48rpx;
+  padding: 28rpx 0;
+  border-top: 1rpx solid rgba(0, 0, 0, 0.04);
+  border-bottom: 1rpx solid rgba(0, 0, 0, 0.04);
+  margin-bottom: 32rpx;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.meta-label {
+  font-size: 22rpx;
+  color: #999999;
+  margin-bottom: 10rpx;
+}
+
+.meta-value {
+  font-size: 26rpx;
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.price-section {
+  background: linear-gradient(135deg, rgba(225, 29, 72, 0.08) 0%, rgba(190, 18, 60, 0.03) 100%);
+  border: 1rpx solid rgba(225, 29, 72, 0.1);
+  border-radius: 20rpx;
+  padding: 28rpx;
+  margin-bottom: 32rpx;
+}
+
+.price-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.price-label {
+  font-size: 26rpx;
+  color: #666666;
+}
+
+.price-value {
+  display: flex;
+  align-items: baseline;
+}
+
+.price-number {
+  font-size: 52rpx;
+  font-weight: 700;
+  color: #E11D48;
+}
+
+.price-unit {
+  font-size: 26rpx;
+  color: #E11D48;
+  margin-left: 8rpx;
+}
+
+.quantity-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 0;
+}
+
+.quantity-label {
+  font-size: 30rpx;
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.quantity-btn {
+  width: 60rpx;
+  height: 60rpx;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: none;
+  border-radius: 14rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  color: #333333;
+  transition: all 0.3s ease;
+}
+
+.quantity-btn:active {
+  transform: scale(0.92);
+  background: #e0e0e0;
+}
+
+.quantity-btn.disabled {
+  opacity: 0.4;
+}
+
+.quantity-input {
+  width: 80rpx;
+  height: 60rpx;
+  background: #f8f9fa;
+  border: none;
+  border-radius: 14rpx;
+  text-align: center;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border-top: 1rpx solid rgba(0, 0, 0, 0.05);
+  padding: 24rpx 30rpx;
+  z-index: 100;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.06);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 20rpx;
+}
+
+.action-btn {
+  flex: 1;
+  height: 88rpx;
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.action-btn:active {
+  transform: scale(0.97);
+}
+
+.cart-btn {
+  background: #ffffff;
+  border: 1rpx solid rgba(0, 0, 0, 0.1);
+  color: #333333;
+  gap: 12rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.04);
+}
+
+.btn-icon {
+  font-size: 32rpx;
+}
+
+.buy-btn {
+  background: linear-gradient(135deg, #E11D48 0%, #BE123C 100%);
+  color: #ffffff;
+  box-shadow: 0 4rpx 20rpx rgba(225, 29, 72, 0.35);
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}

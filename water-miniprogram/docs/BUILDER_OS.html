@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Builder OS</title>
+  <style>
+    :root {
+      --bg: #0e1117;
+      --panel: rgba(255,255,255,0.06);
+      --panel-strong: rgba(255,255,255,0.09);
+      --line: rgba(255,255,255,0.12);
+      --text: #f5f2e8;
+      --muted: #b4b1a7;
+      --red: #ff4d5a;
+      --red-soft: rgba(255, 77, 90, 0.16);
+      --blue: #75b6ff;
+      --blue-soft: rgba(117, 182, 255, 0.16);
+      --gold: #ffcf70;
+      --gold-soft: rgba(255, 207, 112, 0.16);
+      --green: #78e4b1;
+      --green-soft: rgba(120, 228, 177, 0.15);
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Georgia", "Times New Roman", "PingFang SC", "Microsoft YaHei", serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255,77,90,0.16), transparent 28%),
+        radial-gradient(circle at top right, rgba(117,182,255,0.18), transparent 26%),
+        linear-gradient(180deg, #10131a 0%, #0a0d13 100%);
+      min-height: 100vh;
+      letter-spacing: 0.01em;
+    }
+
+    .grain::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.05;
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.6) 0.5px, transparent 0.6px),
+        radial-gradient(circle at 80% 40%, rgba(255,255,255,0.45) 0.5px, transparent 0.6px),
+        radial-gradient(circle at 30% 80%, rgba(255,255,255,0.35) 0.5px, transparent 0.6px);
+      background-size: 24px 24px, 32px 32px, 28px 28px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 24px;
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 20px;
+      align-self: start;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: rgba(15, 19, 27, 0.78);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 0.95;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .sidebar .subtitle {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .nav {
+      display: grid;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .nav a:hover {
+      border-color: var(--line);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .sidebar .mini {
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      display: grid;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.75;
+    }
+
+    .main {
+      display: grid;
+      gap: 22px;
+    }
+
+    .hero,
+    .section,
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: rgba(17, 22, 31, 0.76);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 30px;
+      min-height: 320px;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(60px);
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    .hero::before {
+      width: 320px;
+      height: 320px;
+      background: rgba(255, 77, 90, 0.25);
+      top: -110px;
+      right: -70px;
+    }
+
+    .hero::after {
+      width: 280px;
+      height: 280px;
+      background: rgba(117, 182, 255, 0.24);
+      bottom: -120px;
+      left: -80px;
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      align-items: end;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .hero h2 {
+      margin: 18px 0 14px;
+      font-size: clamp(42px, 6vw, 78px);
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 780px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.8;
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .metric {
+      padding: 16px;
+      border-radius: var(--radius-lg);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .metric .label {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .metric .value {
+      margin-top: 10px;
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .section {
+      padding: 24px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    .section-head h3 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 720px;
+      line-height: 1.8;
+    }
+
+    .grid-2,
+    .grid-3,
+    .grid-4 {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .panel {
+      padding: 18px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: 0.06em;
+    }
+
+    .tag.red { background: var(--red-soft); color: var(--red); }
+    .tag.blue { background: var(--blue-soft); color: var(--blue); }
+    .tag.gold { background: var(--gold-soft); color: var(--gold); }
+    .tag.green { background: var(--green-soft); color: var(--green); }
+
+    .panel h4 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      line-height: 1.15;
+    }
+
+    .panel p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 15px;
+    }
+
+    .panel ul,
+    .panel ol {
+      margin: 12px 0 0 18px;
+      padding: 0;
+      color: var(--muted);
+    }
+
+    .panel li + li { margin-top: 8px; }
+
+    .ladder {
+      display: grid;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 14px;
+      align-items: start;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .step .num {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 16px;
+      font-weight: 700;
+      background: linear-gradient(135deg, rgba(255,77,90,0.26), rgba(117,182,255,0.26));
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .quote {
+      margin-top: 16px;
+      padding: 18px 20px;
+      border-left: 4px solid var(--red);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+      color: #f1e9d4;
+      font-size: 18px;
+      line-height: 1.8;
+    }
+
+    .file-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .file-link {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 14px 16px;
+      border-radius: 16px;
+      text-decoration: none;
+      color: var(--text);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .file-link:hover {
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.07);
+    }
+
+    .file-link span:last-child {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .ribbon {
+      display: inline-flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .chip {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .footer {
+      padding: 22px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 1200px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        position: relative;
+        top: 0;
+      }
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+      .grid-4,
+      .grid-3,
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body class="grain">
+  <div class="layout">
+    <aside class="sidebar">
+      <h1>Builder<br>OS</h1>
+      <div class="subtitle">把方法、地图、AI 编排、交付意识和人成长，组织成一套真正能持续运作的个人构建系统。</div>
+      <nav class="nav">
+        <a href="#map">六层地图</a>
+        <a href="#engine">推进引擎</a>
+        <a href="#capability">四大能力</a>
+        <a href="#routing">路由决策</a>
+        <a href="#delivery">交付与排查</a>
+        <a href="#library">文件库</a>
+      </nav>
+      <div class="mini">
+        <div>当前主命题：成为能用 AI 稳定做成产品系统的 Builder。</div>
+        <div>默认方向：先骨架，后精修；先设计，后实现；先收口，后扩张。</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="hero">
+        <div class="hero-grid">
+          <div>
+            <span class="eyebrow">System View</span>
+            <h2>Operate the Builder,<br>not just the code.</h2>
+            <p>这不是项目说明页，而是一套个人 Builder 操作系统：它帮你把问题归类、把任务切小、把 AI 编排起来，把工程和成长都纳入一个可持续运行的框架。</p>
+            <div class="ribbon">
+              <span class="chip">意图闭环最短</span>
+              <span class="chip">默认设计先行</span>
+              <span class="chip">上下文污染可控</span>
+              <span class="chip">外化优先于记忆</span>
+            </div>
+          </div>
+          <div class="hero-metrics">
+            <div class="metric">
+              <div class="label">问题地图</div>
+              <div class="value">6</div>
+            </div>
+            <div class="metric">
+              <div class="label">推进方法</div>
+              <div class="value">6</div>
+            </div>
+            <div class="metric">
+              <div class="label">核心能力</div>
+              <div class="value">4</div>
+            </div>
+            <div class="metric">
+              <div class="label">协议 / 清单</div>
+              <div class="value">10+</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="map">
+        <div class="section-head">
+          <div>
+            <h3>六层地图 / Problem Map</h3>
+            <p>先判断问题属于哪一层，再决定怎么推进。地图不是世界真相，而是你对抗复杂度的作战图。</p>
+          </div>
+        </div>
+        <div class="grid-3">
+          <article class="panel">
+            <span class="tag red">任务层</span>
+            <h4>现在最该干什么</h4>
+            <p>判断当前目标、拆分顺序、并行还是串行，以及这一轮到底该推进到哪一步。</p>
+          </article>
+          <article class="panel">
+            <span class="tag blue">工程层</span>
+            <h4>系统怎么组织</h4>
+            <p>模块边界、职责切分、公共规则和高冲突主题隔离，都属于工程层。</p>
+          </article>
+          <article class="panel">
+            <span class="tag green">数据层</span>
+            <h4>信息如何流动</h4>
+            <p>字段、状态、契约、兼容与本地/云端口径对齐，是系统成立的底层。</p>
+          </article>
+          <article class="panel">
+            <span class="tag gold">交付层</span>
+            <h4>如何证明能上线</h4>
+            <p>验收、可观测、排查、回退、恢复、运维意识，让产品从 demo 走向真实运行。</p>
+          </article>
+          <article class="panel">
+            <span class="tag red">学习层</span>
+            <h4>你还缺什么认知</h4>
+            <p>术语、方法、框架、认知补课与刻意练习，都属于学习层。</p>
+          </article>
+          <article class="panel">
+            <span class="tag blue">AI 编排层</span>
+            <h4>怎么组织 AI 干活</h4>
+            <p>模型选择、上下文控制、线程切分、单/多 agent、skill/MCP/RAG 配合，都是新世代 Builder 的必修课。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="engine">
+        <div class="section-head">
+          <div>
+            <h3>推进引擎 / Min-Loop Engine</h3>
+            <p>默认推进不靠激情，不靠“继续做一点”，而是靠最小闭环六步法，让每一轮都真的形成可验证结果。</p>
+          </div>
+        </div>
+        <div class="ladder">
+          <div class="step"><div class="num">1</div><div><h4>定义当前意图</h4><p>先说清楚这一轮到底在解决什么，别直接跳进实现。</p></div></div>
+          <div class="step"><div class="num">2</div><div><h4>切出最小闭环</h4><p>功能不是越多越好，关键是核心意图能否最短闭环成立。</p></div></div>
+          <div class="step"><div class="num">3</div><div><h4>先设计，再实现</h4><p>页面关系、数据结构、状态流转、边界情况、验收标准都先想清楚。</p></div></div>
+          <div class="step"><div class="num">4</div><div><h4>写清做什么 / 不做什么</h4><p>没有“不做项”的任务，通常就是边界不清的任务。</p></div></div>
+          <div class="step"><div class="num">5</div><div><h4>关键节点留档</h4><p>目标确认、设计确认、编码前、暂停前都要留下能交接的痕迹。</p></div></div>
+          <div class="step"><div class="num">6</div><div><h4>控制上下文污染</h4><p>新 idea 先归档，高冲突主题拆开推进，讨论窗口不要顺手改项目。</p></div></div>
+        </div>
+        <div class="quote">“最小闭环不是小，而是准；先设计不是慢，而是省返工。”</div>
+      </section>
+
+      <section class="section" id="capability">
+        <div class="section-head">
+          <div>
+            <h3>四大能力 / Capability Matrix</h3>
+            <p>地图回答“问题属于哪层”，能力矩阵回答“你本人还要长出哪几块能力”。</p>
+          </div>
+        </div>
+        <div class="grid-4">
+          <article class="panel">
+            <span class="tag red">AI 编排</span>
+            <h4>组织 AI，不是只调用 AI</h4>
+            <ul>
+              <li>模型与强度选择</li>
+              <li>上下文和窗口控制</li>
+              <li>线程 / agent / 外部记忆协同</li>
+            </ul>
+          </article>
+          <article class="panel">
+            <span class="tag blue">工程能力</span>
+            <h4>让系统成立，不只是让功能可见</h4>
+            <ul>
+              <li>模块边界</li>
+              <li>数据结构与状态流转</li>
+              <li>可观测、可回退、可维护</li>
+            </ul>
+          </article>
+          <article class="panel">
+            <span class="tag green">产品判断</span>
+            <h4>定义骨架，而不只是挑细节</h4>
+            <ul>
+              <li>意图闭环最短</li>
+              <li>最小成立骨架</li>
+              <li>优先级与取舍</li>
+            </ul>
+          </article>
+          <article class="panel">
+            <span class="tag gold">商业闭环</span>
+            <h4>价值交换能否持续发生</h4>
+            <ul>
+              <li>履约与复购</li>
+              <li>渠道与运营</li>
+              <li>长期可持续运行</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="routing">
+        <div class="section-head">
+          <div>
+            <h3>路由决策 / Routing Decisions</h3>
+            <p>很多混乱不是出在代码，而是出在什么时候换线程、换窗口、上多 agent、做全局扫描。</p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <article class="panel">
+            <span class="tag red">线程 / 窗口</span>
+            <h4>什么时候换线程，什么时候开新窗口</h4>
+            <ul>
+              <li>换目标，优先换线程</li>
+              <li>上下文开始影响判断时，再开新窗口</li>
+              <li>方法论窗口默认不碰项目逻辑</li>
+            </ul>
+          </article>
+          <article class="panel">
+            <span class="tag blue">单 agent / 多 agent</span>
+            <h4>边界不清，先别多 agent</h4>
+            <ul>
+              <li>目标清楚</li>
+              <li>子任务可拆</li>
+              <li>边界不重叠</li>
+              <li>结果可分别验收</li>
+            </ul>
+          </article>
+          <article class="panel">
+            <span class="tag green">Bug 排查</span>
+            <h4>先急诊，后体检</h4>
+            <ul>
+              <li>先定症状</li>
+              <li>再缩范围</li>
+              <li>再查局部链路</li>
+              <li>最后才全局扫描</li>
+            </ul>
+          </article>
+          <article class="panel">
+            <span class="tag gold">新 idea</span>
+            <h4>先归档，再裁决</h4>
+            <ul>
+              <li>它是什么</li>
+              <li>解决什么</li>
+              <li>和当前项目什么关系</li>
+              <li>是探索还是准备开工</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="delivery">
+        <div class="section-head">
+          <div>
+            <h3>交付与排查 / Delivery & Observability</h3>
+            <p>交付层不是形式主义，而是让系统在真实世界里出问题时不至于全黑。</p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <article class="panel">
+            <span class="tag blue">最小可观测性</span>
+            <h4>先做到“出问题时不全黑”</h4>
+            <ul>
+              <li>关键业务动作是否发生</li>
+              <li>失败发生在哪一段</li>
+              <li>用户提示与开发排查信息是否一致</li>
+              <li>本地与云端口径是否一致</li>
+            </ul>
+          </article>
+          <article class="panel">
+            <span class="tag red">送水小程序下一顺位</span>
+            <h4>现在最该补的不是更多页面</h4>
+            <ol>
+              <li>开发者工具人工回归</li>
+              <li>云端契约对齐设计</li>
+              <li>最小可观测性补强</li>
+            </ol>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="library">
+        <div class="section-head">
+          <div>
+            <h3>文件库 / Builder Library</h3>
+            <p>这套 OS 已经不是对话，而是文件系统。下面这些文件可以直接打开、交接、复用、迭代。</p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <article class="panel">
+            <span class="tag red">桌面入口</span>
+            <div class="file-list">
+              <a class="file-link" href="file:///C:/Users/Admin/Desktop/Builder-Workspace/00-%E5%85%A5%E5%8F%A3/Builder-%E8%B5%B7%E5%BA%8A%E5%85%88%E7%9C%8B.html"><span>Builder-起床先看.html</span><span>晨起总入口</span></a>
+              <a class="file-link" href="file:///C:/Users/Admin/Desktop/Builder-Workspace/00-%E5%85%A5%E5%8F%A3/Builder-OS.html"><span>Builder-OS.html</span><span>桌面总控页</span></a>
+              <a class="file-link" href="file:///C:/Users/Admin/Desktop/Builder-Workspace/01-%E4%B8%AA%E4%BA%BA%E4%B8%8A%E4%B8%8B%E6%96%87/codex-personal-context.md"><span>codex-personal-context.md</span><span>个人协作上下文</span></a>
+              <a class="file-link" href="file:///C:/Users/Admin/Desktop/Builder-Workspace/02-%E5%9C%B0%E5%9B%BE%E4%B8%8E%E6%96%B9%E6%B3%95/MAP_GUIDE.html"><span>MAP_GUIDE.html</span><span>地图页</span></a>
+              <a class="file-link" href="file:///C:/Users/Admin/Desktop/Builder-Workspace/00-%E5%85%A5%E5%8F%A3/Builder-Decision-Atlas.html"><span>Builder-Decision-Atlas.html</span><span>裁决图谱</span></a>
+            </div>
+          </article>
+          <article class="panel">
+            <span class="tag blue">项目地图与总纲</span>
+            <div class="file-list">
+              <a class="file-link" href="file:///C:/Users/Admin/Documents/trae_projects/personal%20html/water-miniprogram/PROJECT.md"><span>PROJECT.md</span><span>项目总览</span></a>
+              <a class="file-link" href="file:///C:/Users/Admin/Documents/trae_projects/personal%20html/water-miniprogram/docs/BUILDER_OS.md"><span>BUILDER_OS.md</span><span>Builder OS 总纲</span></a>
+              <a class="file-link" href="file:///C:/Users/Admin/Documents/trae_projects/personal%20html/water-miniprogram/docs/MAP_GUIDE.html"><span>MAP_GUIDE.html</span><span>可视化地图</span></a>
+            </div>
+          </article>
+          <article class="panel">
+            <span class="tag green">方法与协议</span>
+            <div class="file-list">
+              <a class="file-link" href="file:///C:/Users/Admin/Documents/trae_projects/personal%20html/water-miniprogram/docs/BUILDER_MIN_LOOP_METHOD.md"><span>BUILDER_MIN_LOOP_METHOD.md</span><span>最小闭环六步法</span></a>
+              <a class="file-link" href="file:///C:/Users/Admin/Documents/trae_projects/personal%20html/water-miniprogram/docs/THREAD_WINDOW_AGENT_PROTOCOL.md"><span>THREAD_WINDOW_AGENT_PROTOCOL.md</span><span>线程 / 窗口 / Agent 协议</span></a>
+              <a class="file-link" href="file:///C:/Users/Admin/Documents/trae_projects/personal%20html/water-miniprogram/docs/BUG_TRIAGE_PROTOCOL.md"><span>BUG_TRIAGE_PROTOCOL.md</span><span>Bug 排查协议</span></a>
+              <a class="file-link" href="file:///C:/Users/Admin/Documents/trae_projects/personal%20html/water-miniprogram/docs/PROMPT_ROUTING_LIBRARY.md"><span>PROMPT_ROUTING_LIBRARY.md</span><span>Prompt 路由模板库</span></a>
+              <a class="file-link" href="file:///C:/Users/Admin/Documents/trae_projects/personal%20html/water-miniprogram/docs/DECISION_ATLAS.html"><span>DECISION_ATLAS.html</span><span>快速裁决图谱</span></a>
+            </div>
+          </article>
+          <article class="panel">
+            <span class="tag gold">成长与交付</span>
+            <div class="file-list">
+              <a class="file-link" href="file:///C:/Users/Admin/Documents/trae_projects/personal%20html/water-miniprogram/docs/BUILDER_FOUR_CAPABILITIES.md"><span>BUILDER_FOUR_CAPABILITIES.md</span><span>四大能力</span></a>
+              <a class="file-link" href="file:///C:/Users/Admin/Documents/trae_projects/personal%20html/water-miniprogram/docs/BUILDER_GROWTH_ROADMAP.md"><span>BUILDER_GROWTH_ROADMAP.md</span><span>成长路线图</span></a>
+              <a class="file-link" href="file:///C:/Users/Admin/Documents/trae_projects/personal%20html/water-miniprogram/docs/DAILY_OPERATING_RHYTHM.md"><span>DAILY_OPERATING_RHYTHM.md</span><span>日常运行节奏</span></a>
+              <a class="file-link" href="file:///C:/Users/Admin/Documents/trae_projects/personal%20html/water-miniprogram/docs/MIN_OBSERVABILITY_CHECKLIST.md"><span>MIN_OBSERVABILITY_CHECKLIST.md</span><span>最小可观测性清单</span></a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <div class="footer">Builder OS / Local Command Deck · built for a high-curiosity, high-structure AI-native builder.</div>
+    </main>
+  </div>
+</body>
+</html>

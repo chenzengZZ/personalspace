@@ -1,0 +1,57 @@
+<view class="container">
+  <view class="product-header">
+    <image class="product-image" src="{{product.image}}" mode="aspectFill" aria-label="{{product.name}}商品大图"></image>
+    <view class="product-badge" wx:if="{{product.stock <= 10}}">库存紧张</view>
+  </view>
+
+  <view class="product-content">
+    <view class="product-title">{{product.name}}</view>
+    <view class="product-desc">{{product.description}}</view>
+    
+    <view class="product-meta">
+      <view class="meta-item">
+        <text class="meta-label">分类</text>
+        <text class="meta-value">{{product.categoryText || (product.category === 'big' ? '大桶水' : '小瓶水')}}</text>
+      </view>
+      <view class="meta-item">
+        <text class="meta-label">销量</text>
+        <text class="meta-value">{{product.sales}} 件</text>
+      </view>
+      <view class="meta-item">
+        <text class="meta-label">库存</text>
+        <text class="meta-value">{{product.stock}} 件</text>
+      </view>
+    </view>
+
+    <view class="price-section">
+      <view class="price-main">
+        <text class="price-label">价格</text>
+        <view class="price-value">
+          <text class="price-number">{{product.price}}</text>
+          <text class="price-unit">元/桶</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="quantity-section">
+      <text class="quantity-label">购买数量</text>
+      <view class="quantity-control">
+        <view class="quantity-btn {{quantity <= 1 ? 'disabled' : ''}}" bindtap="decreaseQuantity" aria-label="减少数量">-</view>
+        <input class="quantity-input" type="number" value="{{quantity}}" bindinput="onQuantityInput" aria-label="购买数量" />
+        <view class="quantity-btn {{quantity >= product.stock ? 'disabled' : ''}}" bindtap="increaseQuantity" aria-label="增加数量">+</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="bottom-bar safe-area-bottom">
+    <view class="action-buttons">
+      <view class="action-btn cart-btn" bindtap="addToCart" aria-label="加入购物车">
+        <text class="btn-icon">🛒</text>
+        <text>加入购物车</text>
+      </view>
+      <view class="action-btn buy-btn" bindtap="buyNow" aria-label="立即购买">
+        <text>立即购买</text>
+      </view>
+    </view>
+  </view>
+</view>

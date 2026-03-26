@@ -1,0 +1,77 @@
+<view class="container">
+  <view class="tabs">
+    <view 
+      class="tab-item {{currentTab === index ? 'active' : ''}}" 
+      wx:for="{{tabs}}" 
+      wx:key="index"
+      bindtap="switchTab"
+      data-index="{{index}}"
+      aria-label="切换到{{item}}订单"
+    >
+      {{item}}
+    </view>
+  </view>
+
+  <view class="search-bar">
+    <view class="search-input-wrapper">
+      <text class="search-icon">🔍</text>
+      <input
+        class="search-input"
+        placeholder="搜索订单号或商品名"
+        value="{{searchKeyword}}"
+        bindinput="onSearchInput"
+        confirm-type="search"
+        aria-label="搜索订单"
+      />
+      <text class="search-clear" wx:if="{{searchKeyword}}" bindtap="clearSearch">×</text>
+    </view>
+  </view>
+
+  <view class="order-list">
+    <view class="order-card" wx:for="{{orders}}" wx:key="_id" bindtap="goToOrderDetail" data-id="{{item._id}}" aria-label="查看订单详情">
+      <view class="order-header">
+        <text class="order-id">订单号：{{item.orderNo}}</text>
+        <text class="order-status status-{{item.status}}">{{item.statusText}}</text>
+      </view>
+      
+      <view class="order-products">
+        <view class="product-item" wx:for="{{item.products}}" wx:for-item="product" wx:key="_id">
+          <image class="product-image" src="{{product.image}}" mode="aspectFill" aria-label="{{product.name}}商品图"></image>
+          <view class="product-info">
+            <text class="product-name">{{product.name}}</text>
+            <view class="product-meta">
+              <text class="product-price">¥{{product.price}}</text>
+              <text class="product-quantity">x{{product.quantity}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="order-footer">
+        <view class="order-total">
+          <text>共{{item.totalCount}}件商品</text>
+          <text class="total-text">实付：</text>
+          <text class="total-price">¥{{item.totalPrice}}</text>
+        </view>
+        <view class="order-actions">
+          <view class="action-btn" wx:if="{{item.status === 'pending'}}" catchtap="cancelOrder" data-id="{{item._id}}" aria-label="取消订单">取消订单</view>
+          <view class="action-btn primary" wx:if="{{item.status === 'pending'}}" catchtap="payOrder" data-id="{{item._id}}" aria-label="去支付">去支付</view>
+          <view class="action-btn" wx:if="{{item.status === 'completed'}}" catchtap="reorder" data-id="{{item._id}}" aria-label="再来一单">再来一单</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:if="{{!orders.length && !loading}}">
+    <image class="empty-image" src="/assets/icons/empty-order.png" mode="aspectFit" />
+    <text class="empty-title">{{emptyState.title}}</text>
+    <text class="empty-desc">{{emptyState.desc}}</text>
+    <button class="empty-btn" bindtap="onEmptyAction">
+      {{searchKeyword ? '清空搜索' : '去下单'}}
+    </button>
+  </view>
+
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>

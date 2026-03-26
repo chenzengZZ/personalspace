@@ -1,0 +1,76 @@
+<view class="container">
+  <view class="user-header">
+    <view class="user-info">
+      <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar" aria-label="选择头像">
+        <image class="avatar" src="{{userInfo.avatar || '/assets/icons/default-avatar.png'}}" mode="aspectFill"></image>
+      </button>
+      <view class="user-detail">
+        <input class="nickname-input" type="nickname" placeholder="点击登录" value="{{userInfo.nickName}}" bindblur="onNicknameChange" bindinput="onNicknameInput" aria-label="昵称输入" />
+        <view class="user-phone" wx:if="{{userInfo.phone}}">{{userInfo.phone}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="order-section">
+    <view class="section-header">
+      <text class="section-title">我的订单</text>
+    </view>
+    <view class="order-tabs">
+      <view class="order-tab" bindtap="goToOrders" data-tab="0" aria-label="待支付订单">
+        <view class="tab-icon">
+          <text class="icon-text">💳</text>
+          <view class="badge" wx:if="{{orderCounts.pending > 0}}">{{orderCounts.pending}}</view>
+        </view>
+        <text>待支付</text>
+      </view>
+      <view class="order-tab" bindtap="goToOrders" data-tab="1" aria-label="配送中订单">
+        <view class="tab-icon">
+          <text class="icon-text">🚚</text>
+          <view class="badge" wx:if="{{orderCounts.delivering > 0}}">{{orderCounts.delivering}}</view>
+        </view>
+        <text>配送中</text>
+      </view>
+      <view class="order-tab" bindtap="goToOrders" data-tab="2" aria-label="已完成订单">
+        <view class="tab-icon">
+          <text class="icon-text">✓</text>
+        </view>
+        <text>已完成</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="menu-section">
+    <view class="menu-item" bindtap="goToAddress" aria-label="收货地址">
+      <view class="menu-left">
+        <text class="menu-icon-text">📍</text>
+        <text class="menu-text">收货地址</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="goToFeedback" aria-label="意见反馈">
+      <view class="menu-left">
+        <text class="menu-icon-text">💬</text>
+        <text class="menu-text">意见反馈</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="goToAbout" aria-label="关于我们">
+      <view class="menu-left">
+        <text class="menu-icon-text">ℹ️</text>
+        <text class="menu-text">关于我们</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="contactService" aria-label="联系客服">
+      <view class="menu-left">
+        <text class="menu-icon-text">📞</text>
+        <text class="menu-text">联系客服</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <view class="logout-btn" wx:if="{{userInfo.nickName}}" bindtap="logout">
+    退出登录
+  </view>
+</view>

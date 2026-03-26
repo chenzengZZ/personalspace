@@ -1,0 +1,52 @@
+<view class="container">
+  <view class="cart-list" wx:if="{{cartItems.length > 0}}">
+    <view class="cart-item" wx:for="{{cartItems}}" wx:key="_id">
+      <view class="item-checkbox" bindtap="toggleSelect" data-id="{{item._id}}" aria-label="选择商品">
+        <view class="checkbox {{item.selected ? 'checked' : ''}}">
+          <text wx:if="{{item.selected}}" class="check-icon">✓</text>
+        </view>
+      </view>
+      <image class="item-image" src="{{item.image}}" mode="aspectFill" aria-label="{{item.name}}商品图"></image>
+      <view class="item-info">
+        <view class="item-name">{{item.name}}</view>
+        <view class="item-price">
+          <text class="price">{{item.price}}</text>
+          <text class="unit">/桶</text>
+        </view>
+        <view class="item-quantity">
+          <view class="quantity-btn {{item.quantity <= 1 ? 'disabled' : ''}}" bindtap="decreaseQuantity" data-id="{{item._id}}" aria-label="减少数量">-</view>
+          <text class="quantity-text">{{item.quantity}}</text>
+          <view class="quantity-btn {{item.quantity >= item.stock ? 'disabled' : ''}}" bindtap="increaseQuantity" data-id="{{item._id}}" aria-label="增加数量">+</view>
+        </view>
+      </view>
+      <view class="item-delete" bindtap="deleteItem" data-id="{{item._id}}" aria-label="删除商品">
+        <text class="delete-icon">×</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:else>
+    <image class="empty-image" src="/assets/icons/empty-cart.png" mode="aspectFit" />
+    <text class="empty-title">购物车还是空的</text>
+    <text class="empty-desc">先挑几件常用饮用水，再回来一起结算。</text>
+    <button class="empty-btn" bindtap="goToIndex">去逛逛</button>
+  </view>
+
+  <view class="cart-footer" wx:if="{{cartItems.length > 0}}">
+    <view class="footer-left">
+      <view class="footer-checkbox" bindtap="toggleSelectAll" aria-label="全选">
+        <view class="checkbox {{isAllSelected ? 'checked' : ''}}">
+          <text wx:if="{{isAllSelected}}" class="check-icon">✓</text>
+        </view>
+      </view>
+      <text class="footer-text">全选</text>
+    </view>
+    <view class="footer-total">
+      <text class="total-label">合计：</text>
+      <text class="total-price">¥{{totalPrice}}</text>
+    </view>
+    <view class="checkout-btn {{selectedCount === 0 ? 'disabled' : ''}}" bindtap="checkout">
+      结算({{selectedCount}})
+    </view>
+  </view>
+</view>

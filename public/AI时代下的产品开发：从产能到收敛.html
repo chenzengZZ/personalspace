@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI时代下的产品开发：从产能到收敛</title>
+  <meta name="description" content="当 AI 把产出变便宜，产品开发真正稀缺的东西开始从实现转向判断、边界与收敛。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0F0F23;
+      --secondary: #1E1B4B;
+      --cta: #E11D48;
+      --cta-hover: #BE123C;
+      --bg: #000000;
+      --bg-elevated: #0A0A0A;
+      --bg-card: #111111;
+      --text: #F8FAFC;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+      --border: rgba(255, 255, 255, 0.08);
+      --content-width: 820px;
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-body: 'Archivo', sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--bg); }
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--bg);
+      font-family: var(--font-body);
+      line-height: 1.85;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(30, 27, 75, 0.38) 0%, transparent 52%),
+        radial-gradient(ellipse 60% 40% at 78% 52%, rgba(225, 29, 72, 0.1) 0%, transparent 50%);
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .progress-bar {
+      position: fixed;
+      inset: 0 auto auto 0;
+      height: 3px;
+      width: 0%;
+      z-index: 1000;
+      background: linear-gradient(90deg, var(--cta) 0%, #ff6b8a 100%);
+      box-shadow: 0 0 18px rgba(225, 29, 72, 0.45);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      backdrop-filter: blur(20px);
+      background: rgba(0, 0, 0, 0.9);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topbar-inner {
+      width: min(1220px, calc(100vw - 32px));
+      margin: 0 auto;
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-mark {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--cta) 0%, #ff6b8a 100%);
+      box-shadow: 0 0 12px rgba(225, 29, 72, 0.5);
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 1.02rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .top-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .top-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      transition: 0.3s ease;
+    }
+
+    .top-link:hover {
+      border-color: rgba(225, 29, 72, 0.32);
+      color: var(--text);
+      background: rgba(225, 29, 72, 0.1);
+    }
+
+    .hero {
+      width: min(1220px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 96px 0 28px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .hero-main,
+    .hero-side {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(17, 17, 17, 0.76);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+    }
+
+    .hero-main {
+      position: relative;
+      padding: 42px 42px 38px;
+    }
+
+    .hero-main::after {
+      content: "";
+      position: absolute;
+      inset: auto -28% -48% auto;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(225, 29, 72, 0.16) 0%, rgba(225, 29, 72, 0) 70%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      color: var(--cta);
+      font-family: var(--font-display);
+      font-size: 0.96rem;
+      font-weight: 500;
+    }
+
+    .hero h1 {
+      margin: 0;
+      max-width: 10.5ch;
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 6vw, 4.4rem);
+      line-height: 1.04;
+      letter-spacing: -0.05em;
+      font-weight: 700;
+      text-wrap: balance;
+    }
+
+    .hero-dek {
+      margin: 22px 0 0;
+      max-width: 56ch;
+      color: var(--text-secondary);
+      font-size: 1.06rem;
+      line-height: 1.85;
+    }
+
+    .hero-statement {
+      margin: 28px 0 0;
+      padding: 22px 24px;
+      border-radius: 12px;
+      background: rgba(225, 29, 72, 0.1);
+      border: 1px solid rgba(225, 29, 72, 0.28);
+      font-family: var(--font-display);
+      font-size: clamp(1.02rem, 2vw, 1.26rem);
+      line-height: 1.7;
+    }
+
+    .hero-side {
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .side-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .meta-card {
+      padding: 20px 18px 18px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .meta-label {
+      display: inline-block;
+      margin-bottom: 10px;
+      color: var(--cta);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .meta-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.98rem;
+      line-height: 1.75;
+    }
+
+    .shell {
+      width: min(1220px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 8px 0 110px;
+    }
+
+    .essay {
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: rgba(17, 17, 17, 0.62);
+      backdrop-filter: blur(8px);
+      padding: 34px clamp(22px, 4vw, 54px) 56px;
+    }
+
+    .essay-inner {
+      width: min(var(--content-width), 100%);
+      margin: 0 auto;
+    }
+
+    .essay p,
+    .essay li,
+    .essay blockquote {
+      font-size: 1.04rem;
+      color: var(--text-secondary);
+    }
+
+    .essay p {
+      margin: 0 0 1.2em;
+    }
+
+    .essay ul,
+    .essay ol {
+      margin: 0 0 1.5em;
+      padding-left: 1.4em;
+    }
+
+    .essay li + li {
+      margin-top: 0.62em;
+    }
+
+    .essay strong {
+      color: var(--text);
+    }
+
+    .essay code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.92em;
+      padding: 0.16em 0.42em;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    h2, h3 {
+      color: var(--text);
+      font-family: var(--font-display);
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      margin: 3.3rem 0 1rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      font-size: clamp(1.55rem, 3vw, 2.15rem);
+      line-height: 1.28;
+    }
+
+    h2:first-child {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    h3 {
+      margin: 1.7rem 0 0.8rem;
+      font-size: 1.06rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--cta);
+    }
+
+    blockquote {
+      margin: 1.4rem 0 1.8rem;
+      padding: 1.15rem 1.25rem;
+      border-left: 3px solid rgba(225, 29, 72, 0.5);
+      border-radius: 0 12px 12px 0;
+      background: rgba(225, 29, 72, 0.1);
+    }
+
+    blockquote p {
+      margin: 0;
+      color: var(--text);
+      font-family: var(--font-display);
+    }
+
+    .ending {
+      margin-top: 2.6rem;
+      padding-top: 1.4rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 960px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .topbar-inner,
+      .hero,
+      .shell {
+        width: min(100vw - 20px, 100% - 20px);
+      }
+
+      .topbar-inner {
+        min-height: 62px;
+        align-items: flex-start;
+        justify-content: center;
+        flex-direction: column;
+        padding: 12px 0;
+      }
+
+      .top-links {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .hero {
+        padding-top: 82px;
+      }
+
+      .hero-main {
+        padding: 28px 22px 24px;
+      }
+
+      .hero-side {
+        padding: 20px 18px;
+      }
+
+      .essay {
+        padding: 26px 18px 40px;
+      }
+
+      .essay p,
+      .essay li,
+      .essay blockquote {
+        font-size: 0.99rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar" id="progressBar"></div>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-mark"></span>
+        <span class="brand-title">AI Product Development Essay</span>
+      </div>
+      <nav class="top-links" aria-label="页面导航">
+        <a class="top-link" href="/">返回首页</a>
+        <a class="top-link" href="/《白日梦幻-文科生的AI开发之旅》.html">阅读《白日梦幻》</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-main">
+      <div class="eyebrow">Essay / Product Development / AI Era</div>
+      <h1>AI时代下的产品开发：从产能到收敛</h1>
+      <p class="hero-dek">当 AI 把产出变便宜，产品开发真正稀缺的东西开始从“实现”转向“判断、边界和收敛”。这篇文章讨论的不是 AI 产品怎么做，而是 AI 时代为什么正在重写普通产品开发的重心。</p>
+      <div class="hero-statement">AI 时代不是大家只是做得更快了，而是整个系统都更怕失真，所以每个岗位都开始对收敛负责。</div>
+    </div>
+    <aside class="hero-side">
+      <div class="side-title">读前速览</div>
+      <article class="meta-card">
+        <span class="meta-label">这篇在讲什么</span>
+        <p>它不是一份“AI 工具清单”，也不是“怎么学编程”的经验帖，而是在解释：为什么 AI 让产出更快之后，产品开发反而更需要判断、边界感、验证和系统收敛。</p>
+      </article>
+      <article class="meta-card">
+        <span class="meta-label">适合谁读</span>
+        <p>适合正在做产品、做应用、做工作流、做 AI 原生软件的人，也适合那些不是技术背景，但已经开始下场自己做东西的人。</p>
+      </article>
+      <article class="meta-card">
+        <span class="meta-label">和《白日梦幻》的关系</span>
+        <p>《白日梦幻》更像一条成长主线，这篇则更像方法论切片。前者讲“人怎么长出来”，后者讲“变化本身到底是什么”。</p>
+      </article>
+    </aside>
+  </section>
+
+  <main class="shell">
+    <article class="essay">
+      <div class="essay-inner">
+        <p>很多人谈 AI 对产品开发的影响，第一反应都是一句话：一切都变快了。</p>
+
+        <p>这句话不能算错，但也不够准。</p>
+
+        <p>真正的变化不只是速度，而是速度改写了整个系统的重心。过去最稀缺的东西，往往是产能，是把东西做出来；现在越来越稀缺的，是判断、止损和收敛。AI 没有推翻产品开发的基本规律，但它改写了这些规律的重要性排序。</p>
+
+        <p>我越来越觉得，今天讨论产品开发，不能只讨论“AI 产品怎么做”，还要讨论更基础的一层：当 AI 成为新的生产力背景之后，普通产品开发这件事本身，到底哪里变了。</p>
+
+        <h2>没变的东西</h2>
+
+        <p>先说没变的，因为这决定了我们不会被“时代变化”这种说法带跑偏。</p>
+
+        <p>产品的本质没变。还是那几个问题：给谁用，解决什么问题，为什么值得做。AI 不会把一个伪需求自动变成真需求，也不会让一个没有价值的流程突然变得有价值。</p>
+
+        <p>工程的本质也没变。系统边界、数据模型、权限、安全、稳定性、可维护性，这些问题今天仍然成立。差别只在于，以前很多团队在“能不能做出来”这一步就已经消耗了大部分精力；现在越来越多人会更早走到下一步，也就是“做出来之后是否站得住”。</p>
+
+        <p>验证这件事当然也没变。过去就讲 MVP、讲敏捷、讲用户反馈，只不过那时它更像优秀团队的好习惯；现在，它越来越像所有团队都必须具备的基本能力。</p>
+
+        <h2>真正变了什么</h2>
+
+        <p>真正变化的，不是原则，而是约束条件。</p>
+
+        <p>第一，产出成本下降了。文档、原型、页面、样板代码、接口草案、内容草案，今天都能以更低成本被快速做出来。很多过去要几天的工作，现在可能几小时就能出一版像样的结果。</p>
+
+        <p>第二，信息流速提高了。一个假设、一句命名、一版交互、一段代码，不再只是停留在脑子里或讨论里，它会迅速进入原型、汇报、排期、实现，最后变成正式系统的一部分。</p>
+
+        <p>第三，错误扩散变快了。以前一个方向错了，因为推进慢，错误也未必扩得很远；现在如果前提错了，AI 和团队会一起把它迅速做完整。它不只是“错”，还会越来越像“对的”。</p>
+
+        <blockquote>
+          <p>执行不再是唯一瓶颈，判断开始变成真正的稀缺品。</p>
+        </blockquote>
+
+        <p>过去很多团队的问题是做得太慢。现在很多团队的问题是做得太快，但不知道自己错在哪。</p>
+
+        <h2>为什么今天更强调早验证、快迭代</h2>
+
+        <p>这里很容易产生一个误解：这些话过去也讲过，为什么现在又拿出来说？</p>
+
+        <p>因为过去“早验证、快迭代”更多是加分项，现在它正在变成基础项。</p>
+
+        <p>过去试错成本高，返工代价大，团队更愿意在前面把事情想得更完整，再进入开发。那时流程重一点、反馈慢一点，虽然笨，但未必立刻掉队，因为大家都慢。</p>
+
+        <p>现在不同了。既然低成本试错已经变容易，不尽早验证，问题就不只是“稳一点”，而是你会高效地做错东西。别人已经通过几轮试验找到方向，你这边还在把一套未经验证的假设做深做重。</p>
+
+        <p>但这里还要分清一件事：不是所有“错得快”都等于快速迭代。</p>
+
+        <p>好的“错得快”，是小成本、可回滚、能明确回答一个问题。坏的“错得快”，是大成本、难回滚、错完也说不清到底错在哪。</p>
+
+        <p>真正有效的迭代，更像是这样一条链路：<code>提出假设 -&gt; 做最小验证 -&gt; 获得明确反馈 -&gt; 调整方向</code>。如果只是高速产出，却没有清晰假设、没有明确反馈、也没有收敛动作，那不叫迭代，只是高速空转。</p>
+
+        <h2>项目的里程碑，为什么也该重写</h2>
+
+        <p>传统里程碑更像按产物推进：PRD 完成、设计完成、开发完成、测试完成。它背后的逻辑是先把职责切开，再把产物拼起来。</p>
+
+        <p>今天更合理的里程碑，越来越应该按“不确定性清除”来设计。比如：核心需求是否成立，主流程是否跑通，技术方案是否可行，用户是否愿意持续使用，这一轮到底验证了什么。</p>
+
+        <p>也就是说，里程碑不再只是“做完了什么”，而更应该是“搞清楚了什么”。这不是文字游戏，而是开发逻辑真的变了。因为在今天，做出一堆产物本身已经不难，难的是确认这些产物没有建立在错误前提上。</p>
+
+        <h2>角色为什么在演变</h2>
+
+        <p>角色演变不只是岗责变化，也不只是“谁会不会被替代”这么表层。更准确的说法是：同样的工作象限，关注点变了。</p>
+
+        <p>产品经理以前更关心需求完整性、功能覆盖、版本排期、文档清晰。今天这些仍然重要，但更值钱的注意力，越来越放在问题定义、优先级判断、假需求识别，以及这次投入到底在消除什么不确定性。</p>
+
+        <p>设计师以前更关心页面长什么样、交互顺不顺、规范齐不齐、稿子交没交。现在这些依然重要，但真正拉开差距的，是信息结构对不对、用户决策成本高不高、设计是在解决问题还是在掩盖问题。</p>
+
+        <p>前端和后端也是一样。表面上还是在实现，但更高价值的关注点已经不只是“能不能做出来”，而是这套实现是否在固化错误流程、污染系统边界、增加未来维护成本，或者阻碍团队继续收敛。</p>
+
+        <p>所以角色演变，本质上不是岗位没了，而是每个岗位都被迫从“完成自己的产出”转向“对系统的收敛负责”。</p>
+
+        <h2>快带来的副作用：污染会蔓延</h2>
+
+        <p>如果说 AI 时代有一个特别容易被低估的问题，那就是污染的蔓延。</p>
+
+        <p>这里说的污染，不只是代码脏，而是更广义的失真。它可以是一条错假设、一个坏命名、一版没想清楚的流程、一个伪需求、一种站不住脚的抽象。</p>
+
+        <p>过去这些问题也会有，但传播速度没那么快。现在一旦它们进入 PRD、原型、设计稿、接口、代码和汇报材料，就会迅速获得一种“看起来很正式”的外壳。团队会因为已经做了很多，而更难承认最开始的前提有问题。</p>
+
+        <ol>
+          <li>一个未经验证的假设进入方案。</li>
+          <li>方案被快速展开成原型、页面、接口和代码。</li>
+          <li>团队因为已有投入而默认方向正确。</li>
+          <li>后续优化都建立在错前提上。</li>
+          <li>项目越来越完整，也越来越偏。</li>
+        </ol>
+
+        <p>所以今天优秀团队不只是要快，还要有抗污染能力。要把假设写出来，用里程碑绑定验证结论，明确区分实验性资产和正式资产，让核心概念尽早收敛，并且保留大删大改的权力。</p>
+
+        <h2>技术背景与非技术背景：差别不会消失，但会被重写</h2>
+
+        <p>技术背景和非技术背景的差别并没有消失，只是它越来越不像过去那样，是两块封闭得很死的领地。</p>
+
+        <p>技术背景的人，天然更擅长处理确定性和系统性问题。他们更容易理解约束、抽象、边界、依赖、性能、稳定性，所以在“把东西做成可运行系统”这件事上，依然占很强的优势。</p>
+
+        <p>非技术背景的人，天然更擅长处理语境性和现实性问题。他们通常更容易理解用户、业务、传播、协作、组织阻力和场景细节，所以在“把系统接进真实世界”这件事上，往往更敏感。</p>
+
+        <p>如果把它压缩一点，可以说：技术背景更强在形式化，非技术背景更强在情境化。前者把复杂东西变成系统，后者把系统放回人和现实里。</p>
+
+        <p>AI 时代真正改变的，是这两类人的距离。以前从想法到实现，中间隔着很深的技术鸿沟；现在很多表达、原型、流程、自动化、应用层搭建，都可以被 AI 大幅压低门槛，于是非技术背景的人离“动手做”更近了，技术背景的人离“只管实现”也更远了。</p>
+
+        <p>但这里也要说清楚：门槛没有消失，只是重排了。底层系统、复杂架构、性能、安全、基础设施，这些地方依然高度偏技术。AI 缩短了非技术背景进入生产系统的距离，但并没有抹平技术深度的价值。</p>
+
+        <h2>对非技术背景的人来说，新的门槛是什么</h2>
+
+        <p>如果一个人不是技术序列出身，但已经能手搓出一个 AI 驱动的应用，这件事本身说明的，不是“AI 替他做了”，而是他已经跨进了另外一条生产路径。</p>
+
+        <p>这类人真正的价值，往往不在于是不是一行一行亲手写完，而在于：他知不知道自己要什么，能不能判断哪里不对，能不能逼着系统走到自己想要的位置，以及能不能为结果负责。</p>
+
+        <p>如果这些成立，那么 AI 只是放大器，主导权仍然在他手里。</p>
+
+        <p>但新的瓶颈也会很快出现：不是做不出来，而是养不下去。很多人都会走到这一步。概念可以，设计可以，效果判断也可以，结果导向也可以，但代码维护性还是黑盒。这样的状态一点都不稀奇，反而很典型。因为 AI 已经帮你跨过了“能不能跑起来”的门槛，但还没有自动帮你建立工程视角。</p>
+
+        <p>所以真正该补的，不是继续证明自己能做东西，而是开始建立对系统质量的感觉。换句话说，是把代码从黑盒变成灰盒。</p>
+
+        <h2>从问题出发，不是口号，而是一条完整链路</h2>
+
+        <p>前面这些变化，最后都会落回一条很实用的主线：从问题出发。</p>
+
+        <p>但这里的“从问题出发”不是一句泛泛的口号，而是一条完整链路：<code>问题 -&gt; 约束 -&gt; 解法 -&gt; 验证 -&gt; 边界 -&gt; 演进</code>。</p>
+
+        <p>问题，是这到底是不是值得解决的问题。约束，是这个问题在什么条件下成立。解法，是有哪些方案，各自 tradeoff 是什么。验证，是怎么知道这个方案真的有效。边界，是这个方案解决到哪里为止。演进，是如果它成立，下一步怎么长；如果不成立，怎么收。</p>
+
+        <p>很多人会做东西，但不会判断问题值不值得做；很多人会谈问题，但不会把它压成可验证、可实现、可演进的结构。真正稀缺的，往往是中间那种人：既能看问题，也能把问题压成系统。</p>
+
+        <h2>真正难的，不只是长能力，而是长出位置</h2>
+
+        <p>前面所有这些内容，很多都还属于个体能力层面的增长。但现实世界不是“每个人分一个小屋、一台电脑，然后按能力自然结算”的世界。现实世界是一个大型协作网络，里面有组织、有资源分配、有身份预期、有信任门槛，也有大量并不完全按能力运转的地方。</p>
+
+        <p>所以一个人最后面对的问题，往往不只是“我能不能做出来”，还包括“我做出来之后，能不能在这个社会结构里找到可持续的位置”。这不是技术问题，这是位置问题。</p>
+
+        <p>而位置问题，往往比能力问题更难。因为它多了几层现实：别人怎么理解你，市场怎么给你定类，组织愿不愿意给你入口，你有没有稳定交换价值的方式，你做的事能不能被看见、被信任、被购买、被纳入协作。</p>
+
+        <p>也就是说，位置不是先验地存在，然后你去找到它。很多时候，位置是慢慢长出来的。它至少要靠三件事共同成立：你能持续提供什么价值，你如何解释自己，你进入什么网络。</p>
+
+        <p>第一点决定你有没有真能力。第二点决定社会能不能低成本理解你。第三点决定你的能力会不会停留在“只有自己知道还不错”。所以很多时候，一个人真正缺的，不只是能力，而是把自己的能力组织成一个社会看得懂、用得上的角色。</p>
+
+        <h2>最后收成一句话</h2>
+
+        <p>如果非要把这篇文章压成一句最短的话，我会写成：</p>
+
+        <blockquote>
+          <p>AI 时代不是大家只是做得更快了，而是整个系统都更怕失真，所以每个岗位都开始对收敛负责。</p>
+        </blockquote>
+
+        <p>对团队来说，这意味着项目的核心任务，正在从“组织生产”慢慢转向“组织收敛”。</p>
+
+        <p>对个人来说，这意味着新的门槛不只是谁会不会写代码，而是谁能定义问题、借助工具做出结果、并且在高速度下控制复杂度和错误扩散。</p>
+
+        <p>前一阶段的关键能力，是把模糊想法做出来。后一阶段的关键能力，是让它不至于越做越乱。这两者加在一起，才算真正跨过从“会做东西”到“能管复杂度”的门槛。</p>
+
+        <p class="ending">如果你是从《白日梦幻》跳到这里，可以把这篇当作它的一篇书外方法论切片。它谈的不是“人怎么成长”，而是“这个变化本身到底是什么”。</p>
+      </div>
+    </article>
+  </main>
+
+  <script>
+    const progressBar = document.getElementById('progressBar');
+
+    function updateProgress() {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      progressBar.style.width = progress + '%';
+    }
+
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, { passive: true });
+  </script>
+</body>
+</html>

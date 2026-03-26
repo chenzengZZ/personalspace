@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>送水小程序训练手册</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #667085;
+      --line: #e5e7eb;
+      --accent: #dc143c;
+      --accent-soft: #fff1f4;
+      --blue-soft: #eef6ff;
+      --green-soft: #edf9f1;
+      --yellow-soft: #fff8e8;
+      --shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    .wrap {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+    }
+
+    .hero,
+    .section,
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 28px;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #ffffff, #fff5f7);
+    }
+
+    h1, h2, h3 { margin: 0 0 12px; }
+    p { margin: 0; color: var(--muted); }
+
+    .hero h1 {
+      font-size: 32px;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .hero p + p {
+      margin-top: 8px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .section {
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      padding: 18px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .badge.blue {
+      color: #2563eb;
+      background: var(--blue-soft);
+    }
+
+    .badge.green {
+      color: #15803d;
+      background: var(--green-soft);
+    }
+
+    .badge.yellow {
+      color: #a16207;
+      background: var(--yellow-soft);
+    }
+
+    ul, ol {
+      margin: 10px 0 0 18px;
+      padding: 0;
+    }
+
+    li + li {
+      margin-top: 6px;
+    }
+
+    .flow {
+      overflow-x: auto;
+      background: #fbfcfe;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+      margin-top: 14px;
+    }
+
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 14px;
+      color: #111827;
+      line-height: 1.7;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+    }
+
+    .callout {
+      border-left: 4px solid var(--accent);
+      background: #fff7f8;
+      padding: 14px 16px;
+      border-radius: 12px;
+      margin-top: 14px;
+      color: #4b5563;
+    }
+
+    .checklist li::marker {
+      content: "✓ ";
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .practice {
+      border-top: 1px dashed var(--line);
+      margin-top: 16px;
+      padding-top: 16px;
+    }
+
+    .footer-note {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>送水小程序训练手册</h1>
+      <p>这不是一张“看完就关掉”的说明页，而是一份反复练习用的项目导航图。</p>
+      <p>你后面每次卡住，都先回来问自己：我这个问题属于哪一层？现在是在设计、拆分、实现，还是在交接？</p>
+      <div class="meta">
+        <span class="pill">用途：定位问题</span>
+        <span class="pill">用途：训练判断</span>
+        <span class="pill">用途：协作交接</span>
+        <span class="pill">用途：避免线程污染</span>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>一、六层地图</h2>
+      <div class="grid">
+        <article class="card">
+          <div class="badge">任务层</div>
+          <h3>你在问什么</h3>
+          <ul>
+            <li>当前目标是什么</li>
+            <li>任务怎么拆分</li>
+            <li>哪些能并行，哪些必须串行</li>
+            <li>要不要新线程 / 多 agent</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="badge blue">工程层</div>
+          <h3>你在问什么</h3>
+          <ul>
+            <li>模块怎么分</li>
+            <li>公共规则放哪里</li>
+            <li>边界和职责是否清楚</li>
+            <li>要不要新工作树 / 分支</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="badge green">数据层</div>
+          <h3>你在问什么</h3>
+          <ul>
+            <li>字段长什么样</li>
+            <li>状态怎么流转</li>
+            <li>前后端契约是否一致</li>
+            <li>兼容是否稳定</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="badge yellow">交付层</div>
+          <h3>你在问什么</h3>
+          <ul>
+            <li>怎么验收</li>
+            <li>怎么回退</li>
+            <li>怎么排查</li>
+            <li>上线前检查什么</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="badge">学习层</div>
+          <h3>你在问什么</h3>
+          <ul>
+            <li>当前最该补哪些术语</li>
+            <li>这个问题属于地图哪一层</li>
+            <li>怎么保持最小闭环</li>
+            <li>什么时候该收敛</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="badge blue">AI 编排层</div>
+          <h3>你在问什么</h3>
+          <ul>
+            <li>该用什么模型 / 思考强度</li>
+            <li>什么时候切新窗口或新线程</li>
+            <li>什么时候适合多 agent</li>
+            <li>skill / MCP / RAG / 外部记忆怎么配合</li>
+          </ul>
+        </article>
+      </div>
+      <div class="callout">
+        训练动作：以后每次提问，先尝试给它归类到“任务层 / 工程层 / 数据层 / 交付层 / 学习层 / AI 编排层”之一。归不清也没关系，但必须先尝试。
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>二、系统关系图</h2>
+      <div class="flow">
+        <pre>现实目标（稳定上线、长期运维）
+└─ Thread 线程：一个明确任务
+   ├─ 规划多地址管理
+   ├─ 接云环境
+   └─ 做上线清单
+      └─ Agent：执行者
+         ├─ 查数据契约
+         ├─ 看 UI / 交互
+         └─ 整理文档 / 风险
+
+Repo 仓库：water-miniprogram
+└─ Branch 分支：代码历史路线
+   ├─ main
+   ├─ feat/cloud
+   └─ feat/admin
+      └─ Worktree 工作树：独立工位
+         ├─ wt-main-stable
+         ├─ wt-cloud
+         └─ wt-ui</pre>
+      </div>
+      <div class="two-col practice">
+        <article class="card">
+          <div class="badge">一句话记忆</div>
+          <ul>
+            <li>线程是任务</li>
+            <li>工作树是工位</li>
+            <li>分支是历史路线</li>
+            <li>agent 是执行者</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="badge blue">最常见误区</div>
+          <ul>
+            <li>把线程当成分支</li>
+            <li>把工作树当成必须一开始就开的东西</li>
+            <li>以为多 agent 越多越快</li>
+            <li>以为代码实现比任务拆分更早</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>三、默认工作顺序</h2>
+      <div class="grid">
+        <article class="card">
+          <div class="badge green">正确顺序</div>
+          <ol>
+            <li>对齐目标</li>
+            <li>拆分任务</li>
+            <li>分析依赖与冲突</li>
+            <li>决定线程 / 工作树 / agent</li>
+            <li>明确范围</li>
+            <li>明确验收标准</li>
+            <li>留档</li>
+            <li>最后才写代码</li>
+          </ol>
+        </article>
+        <article class="card">
+          <div class="badge yellow">当前项目提醒</div>
+          <ul>
+            <li>云端接入是高冲突主题</li>
+            <li>地址结构、订单流转属于高风险</li>
+            <li>样式和静态文案属于低风险</li>
+            <li>当前更适合先设计再进入实现</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>四、窗口分工与新 idea 规则</h2>
+      <div class="two-col">
+        <article class="card">
+          <div class="badge">窗口分工</div>
+          <ul>
+            <li>执行窗口：推进项目设计、开发、排查、交付</li>
+            <li>元认知窗口：讨论方法论、学习、协作规则、认知地图</li>
+            <li>讨论窗口默认不改项目文件</li>
+            <li>执行窗口优先保证当前链路不断裂</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="badge blue">新 idea 处理</div>
+          <ul>
+            <li>先记下来，不立刻插入当前开发链路</li>
+            <li>先判断它属于当前项目，还是新线程</li>
+            <li>至少说明：它是什么、解决什么、和当前项目什么关系</li>
+            <li>再决定是归档、排期，还是单独启动</li>
+          </ul>
+        </article>
+      </div>
+      <div class="callout">
+        核心原则：新想法不等于马上开工。先归档，再裁决；先分流，再执行。
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>五、关键环节留档规则</h2>
+      <div class="two-col">
+        <article class="card">
+          <div class="badge">必须留档的时刻</div>
+          <ul class="checklist">
+            <li>目标确认后</li>
+            <li>关键设计确认后</li>
+            <li>开始编码前</li>
+            <li>暂停前</li>
+            <li>切线程前</li>
+            <li>开新窗口前</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="badge blue">对应文件</div>
+          <ul>
+            <li><code>docs/CURRENT_TASK.md</code>：当前任务状态</li>
+            <li><code>docs/HANDOFF_LOG.md</code>：暂停与交接</li>
+            <li><code>docs/WORKFLOW_CHECKLIST.md</code>：协作规则</li>
+            <li><code>PROJECT.md</code>：项目关键决策</li>
+            <li><code>CLOUD_HANDOFF.md</code>：云端契约说明</li>
+          </ul>
+        </article>
+      </div>
+      <div class="callout">
+        训练动作：以后每完成一个关键节点，不要问“要不要记下来”，而是直接问“这次应该更新哪个文件”。
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>六、自检清单</h2>
+      <div class="grid">
+        <article class="card">
+          <div class="badge">问题自检</div>
+          <ul>
+            <li>我这个问题属于哪一层？</li>
+            <li>这是设计问题还是实现问题？</li>
+            <li>是否会碰核心链路？</li>
+            <li>是否依赖云端或外部条件？</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="badge blue">任务自检</div>
+          <ul>
+            <li>这一轮只做什么？</li>
+            <li>这一轮明确不做什么？</li>
+            <li>验收标准是什么？</li>
+            <li>是否需要留档？</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="badge green">实现前自检</div>
+          <ul>
+            <li>页面关系清楚了吗？</li>
+            <li>数据结构清楚了吗？</li>
+            <li>边界情况想过了吗？</li>
+            <li>现在真到了写代码的时候吗？</li>
+          </ul>
+        </article>
+      </div>
+      <div class="callout">
+        快速裁决器：如果一个问题同时碰到“核心链路 + 云端依赖 + 数据结构”，先别写代码，先做设计确认。
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>七、卓越 builder 的训练方向</h2>
+      <div class="grid">
+        <article class="card">
+          <div class="badge">不是只会做页</div>
+          <ul>
+            <li>能定义最小成立骨架</li>
+            <li>能判断先做什么、后做什么</li>
+            <li>能看见产品的价值交换和约束</li>
+            <li>能把经验沉淀成规则与交接</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="badge green">当前最该补</div>
+          <ul>
+            <li>骨架判断，而不是先磨 UI</li>
+            <li>优先级裁决，而不是一路展开</li>
+            <li>上线与运维意识，而不是只看能跑</li>
+            <li>留档与复盘，而不是只靠当场记忆</li>
+            <li>AI 编排能力，而不是只会单次提问</li>
+          </ul>
+        </article>
+      </div>
+      <div class="callout">
+        你要练的不是“让 AI 多写一点”，而是“让系统更稳地成立、推进、交接、上线”。
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>八、刻意练习方法</h2>
+      <div class="two-col">
+        <article class="card">
+          <div class="badge">日常练法</div>
+          <ol>
+            <li>先归类问题</li>
+            <li>再决定当前阶段</li>
+            <li>再问最关键的一个问题</li>
+            <li>最后才考虑实现</li>
+          </ol>
+        </article>
+        <article class="card">
+          <div class="badge yellow">适合你的节奏</div>
+          <ul>
+            <li>允许自由发散</li>
+            <li>但每轮最后必须收敛</li>
+            <li>一次只推进一个最小闭环</li>
+            <li>把记忆外化，不依赖聊天历史</li>
+          </ul>
+        </article>
+      </div>
+      <p class="footer-note">建议配合 `docs/TERMS_MINI.md` 和 `docs/CURRENT_TASK.md` 一起使用。</p>
+    </section>
+
+    <section class="section">
+      <h2>九、Builder 最小闭环六步法</h2>
+      <div class="grid">
+        <article class="card">
+          <div class="badge">六步法</div>
+          <ol>
+            <li>先定义当前意图</li>
+            <li>切出最小闭环</li>
+            <li>先设计，再实现</li>
+            <li>写清这轮做什么 / 不做什么</li>
+            <li>关键节点留档</li>
+            <li>控制上下文污染</li>
+          </ol>
+        </article>
+        <article class="card">
+          <div class="badge blue">核心提醒</div>
+          <ul>
+            <li>最小闭环不是小，而是准</li>
+            <li>先设计不是慢，而是省返工</li>
+            <li>留档不是形式，而是协作记忆系统</li>
+            <li>污染先伤判断，再伤实现</li>
+          </ul>
+        </article>
+      </div>
+      <div class="callout">
+        这套方法不是“多一个流程”，而是为了防止 AI 协作时看起来很忙、实际上没有形成闭环。
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>十、AI 时代 Builder 四大能力</h2>
+      <div class="grid">
+        <article class="card">
+          <div class="badge">AI 编排</div>
+          <ul>
+            <li>模型 / 强度选择</li>
+            <li>上下文控制</li>
+            <li>线程、agent、外部记忆配合</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="badge blue">工程能力</div>
+          <ul>
+            <li>模块边界</li>
+            <li>数据结构与状态流转</li>
+            <li>可观测、可排查、可维护</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="badge green">产品判断</div>
+          <ul>
+            <li>意图闭环最短</li>
+            <li>最小成立骨架</li>
+            <li>优先级与取舍</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="badge yellow">商业闭环</div>
+          <ul>
+            <li>价值交换</li>
+            <li>履约与复购</li>
+            <li>长期可持续运行</li>
+          </ul>
+        </article>
+      </div>
+      <div class="callout">
+        问题地图回答“这个问题属于哪层”，四大能力回答“你本人要长出哪几块能力”。两个都要有。
+      </div>
+      <p class="footer-note">详细版可看 `docs/BUILDER_MIN_LOOP_METHOD.md` 与 `docs/BUILDER_FOUR_CAPABILITIES.md`。</p>
+    </section>
+  </div>
+</body>
+</html>

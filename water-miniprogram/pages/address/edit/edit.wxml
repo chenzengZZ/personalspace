@@ -1,0 +1,57 @@
+<view class="container">
+  <view class="page-header">
+    <text class="page-title">{{pageTitle}}</text>
+    <text class="page-desc">{{mode === 'edit' ? '修改后会同步到地址列表' : '填写一个常用地址，后续下单更方便'}}</text>
+  </view>
+
+  <view class="form-item">
+    <text class="form-label">收货人</text>
+    <input 
+      class="form-input" 
+      placeholder="请输入姓名" 
+      value="{{name}}"
+      bindinput="onNameInput"
+    />
+  </view>
+
+  <view class="form-item">
+    <text class="form-label">手机号</text>
+    <input 
+      class="form-input" 
+      placeholder="请输入手机号" 
+      type="number"
+      maxlength="11"
+      value="{{phone}}"
+      bindinput="onPhoneInput"
+    />
+  </view>
+
+  <view class="form-item">
+    <text class="form-label">所在地区</text>
+    <picker 
+      mode="region" 
+      bindchange="onRegionChange" 
+      value="{{region}}" 
+      class="form-picker"
+    >
+      <view class="form-picker-text {{region.length > 0 ? '' : 'placeholder'}}">
+        {{region.length > 0 ? region[0] + ' ' + region[1] + ' ' + region[2] : '请选择省市区'}}
+      </view>
+    </picker>
+  </view>
+
+  <view class="form-item address-detail">
+    <text class="form-label">详细地址</text>
+    <textarea 
+      class="form-textarea" 
+      placeholder="请输入街道、门牌号等详细地址" 
+      value="{{detail}}"
+      bindinput="onDetailInput"
+      maxlength="100"
+    />
+  </view>
+
+  <view class="bottom-bar">
+    <button class="save-btn" bindtap="saveAddress">{{mode === 'edit' ? '保存修改' : '保存地址'}}</button>
+  </view>
+</view>

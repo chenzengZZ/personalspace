@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>送水站 · 管理后台</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --bg: #f1f5f9;
+      --bg-elevated: #ffffff;
+      --border: #e2e8f0;
+      --border-subtle: #f1f5f9;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --accent-subtle: #eff6ff;
+      --success: #10b981;
+      --success-subtle: #ecfdf5;
+      --warning: #f59e0b;
+      --warning-subtle: #fffbeb;
+      --danger: #ef4444;
+      --danger-subtle: #fef2f2;
+      --sidebar-bg: #0f172a;
+      --sidebar-hover: #1e293b;
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.05);
+      --transition: 0.15s ease;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: 220px;
+      background: var(--sidebar-bg);
+      color: white;
+      position: fixed;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 24px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon svg { width: 20px; height: 20px; color: white; }
+
+    .logo-text { font-size: 16px; font-weight: 600; letter-spacing: -0.02em; }
+    .logo-text span { display: block; font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+    .sidebar-nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
+
+    .nav-section { margin-bottom: 24px; }
+    .nav-section-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: rgba(255,255,255,0.3); padding: 0 12px; margin-bottom: 8px; }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .nav-item:hover { background: var(--sidebar-hover); color: white; }
+    .nav-item.active { background: var(--accent); color: white; }
+
+    .sidebar-footer { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.06); }
+    .user-info { display: flex; align-items: center; gap: 12px; }
+    .user-avatar { width: 36px; height: 36px; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; }
+    .user-name { font-size: 14px; font-weight: 500; }
+    .user-role { font-size: 12px; color: rgba(255,255,255,0.4); }
+
+    .main { flex: 1; margin-left: 220px; padding: 32px 40px; }
+
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+    .header-left h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; }
+    .header-left p { color: var(--text-muted); font-size: 14px; margin-top: 4px; }
+    .header-actions { display: flex; gap: 12px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      color: var(--text-secondary);
+      transition: var(--transition);
+    }
+
+    .btn svg { width: 16px; height: 16px; }
+    .btn:hover { background: var(--bg); border-color: var(--text-muted); }
+    .btn-primary { background: var(--accent); color: white; border: none; }
+    .btn-primary:hover { background: var(--accent-hover); }
+
+    .card {
+      background: var(--bg-elevated);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 24px;
+    }
+
+    .card-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-title { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+    .card-body { padding: 24px; }
+
+    .report-section { margin-bottom: 28px; }
+    .report-section:last-child { margin-bottom: 0; }
+
+    .report-section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .report-section-title svg { width: 16px; height: 16px; }
+
+    .metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+    .metric-item {
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      padding: 16px;
+    }
+
+    .metric-label { font-size: 13px; color: var(--text-muted); margin-bottom: 4px; }
+    .metric-value { font-size: 24px; font-weight: 600; }
+    .metric-change { font-size: 12px; margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+    .metric-change.up { color: var(--success); }
+    .metric-change.down { color: var(--danger); }
+    .metric-change svg { width: 12px; height: 12px; }
+
+    .insight-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .insight-item {
+      display: flex;
+      gap: 12px;
+      padding: 16px;
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      border-left: 3px solid var(--accent);
+    }
+
+    .insight-item.success { border-left-color: var(--success); }
+    .insight-item.warning { border-left-color: var(--warning); }
+    .insight-item.danger { border-left-color: var(--danger); }
+
+    .insight-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .insight-icon.blue { background: var(--accent-subtle); color: var(--accent); }
+    .insight-icon.green { background: var(--success-subtle); color: var(--success); }
+    .insight-icon.orange { background: var(--warning-subtle); color: var(--warning); }
+    .insight-icon.red { background: var(--danger-subtle); color: var(--danger); }
+
+    .insight-icon svg { width: 16px; height: 16px; }
+
+    .insight-content { flex: 1; }
+    .insight-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+    .insight-desc { font-size: 13px; color: var(--text-secondary); }
+
+    .suggestion-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .suggestion-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      border-radius: var(--radius-md);
+    }
+
+    .suggestion-number {
+      width: 24px;
+      height: 24px;
+      background: var(--accent);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .suggestion-text { font-size: 14px; color: var(--text-primary); }
+
+    .product-analysis { display: flex; flex-direction: column; gap: 12px; }
+
+    .product-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 16px;
+      background: var(--bg);
+      border-radius: var(--radius-md);
+    }
+
+    .product-rank {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--border);
+      color: var(--text-muted);
+    }
+
+    .product-rank.top { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); color: #b45309; }
+
+    .product-info { flex: 1; }
+    .product-name { font-size: 14px; font-weight: 500; }
+    .product-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    .product-bar {
+      width: 120px;
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .product-bar-fill { height: 100%; background: var(--accent); border-radius: 3px; }
+
+    .product-percent { font-size: 14px; font-weight: 600; width: 50px; text-align: right; }
+
+    .time-analysis { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+
+    .day-bar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .day-bar-chart {
+      width: 100%;
+      height: 80px;
+      background: var(--border);
+      border-radius: var(--radius-sm);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .day-bar-fill {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(180deg, var(--accent) 0%, #1d4ed8 100%);
+      border-radius: var(--radius-sm);
+    }
+
+    .day-label { font-size: 12px; color: var(--text-muted); }
+    .day-label.peak { color: var(--accent); font-weight: 600; }
+    .day-label.low { color: var(--warning); }
+
+    .ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: white;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .ai-badge svg { width: 12px; height: 12px; }
+
+    .time-period-tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--bg);
+      padding: 4px;
+      border-radius: var(--radius-md);
+    }
+
+    .time-tab {
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .time-tab:hover { color: var(--text-primary); }
+    .time-tab.active { background: var(--bg-elevated); color: var(--text-primary); box-shadow: var(--shadow-sm); }
+
+    @media (max-width: 1200px) {
+      .metric-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 20px; }
+      .metric-grid { grid-template-columns: 1fr; }
+      .time-analysis { grid-template-columns: repeat(4, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+            </svg>
+          </div>
+          <div class="logo-text">
+            送水站
+            <span>管理后台</span>
+          </div>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">概览</div>
+          <a class="nav-item" href="admin-prototype.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"/>
+              <rect x="14" y="3" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/>
+            </svg>
+            数据看板
+          </a>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">分析</div>
+          <a class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a10 10 0 1 0 10 10H12V2z"/>
+              <path d="M12 2a10 10 0 0 1 10 10"/>
+              <circle cx="12" cy="12" r="6"/>
+            </svg>
+            AI 智能分析
+          </a>
+          <a class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"/>
+              <line x1="12" y1="20" x2="12" y2="4"/>
+              <line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
+            销售报表
+          </a>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">管理</div>
+          <a class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+            订单管理
+          </a>
+          <a class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+            商品管理
+          </a>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">系统</div>
+          <a class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+            系统设置
+          </a>
+        </div>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar">管</div>
+          <div>
+            <div class="user-name">管理员</div>
+            <div class="user-role">超级管理员</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="header">
+        <div class="header-left">
+          <h1>
+            AI 智能分析
+            <span class="ai-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a10 10 0 1 0 10 10H12V2z"/>
+              </svg>
+              规则引擎
+            </span>
+          </h1>
+          <p>基于数据的智能经营分析报告</p>
+        </div>
+        <div class="header-actions">
+          <div class="time-period-tabs">
+            <div class="time-tab" onclick="switchPeriod('day')">今日</div>
+            <div class="time-tab active" onclick="switchPeriod('week')">本周</div>
+            <div class="time-tab" onclick="switchPeriod('month')">本月</div>
+          </div>
+          <button class="btn" onclick="exportReport()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            导出报告
+          </button>
+        </div>
+      </header>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📊 销售概况</span>
+        </div>
+        <div class="card-body">
+          <div class="metric-grid">
+            <div class="metric-item">
+              <div class="metric-label">总销售额</div>
+              <div class="metric-value">¥12,450</div>
+              <div class="metric-change up">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                </svg>
+                环比 +15%
+              </div>
+            </div>
+            <div class="metric-item">
+              <div class="metric-label">订单数</div>
+              <div class="metric-value">328单</div>
+              <div class="metric-change up">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                </svg>
+                环比 +8%
+              </div>
+            </div>
+            <div class="metric-item">
+              <div class="metric-label">客单价</div>
+              <div class="metric-value">¥38</div>
+              <div class="metric-change up">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                </svg>
+                环比 +6%
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">💡 核心洞察</span>
+        </div>
+        <div class="card-body">
+          <div class="insight-list" id="insightList">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📦 商品分析</span>
+        </div>
+        <div class="card-body">
+          <div class="product-analysis" id="productAnalysis">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📅 时间分析</span>
+        </div>
+        <div class="card-body">
+          <div class="time-analysis" id="timeAnalysis">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🎯 经营建议</span>
+        </div>
+        <div class="card-body">
+          <div class="suggestion-list" id="suggestionList">
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const mockData = {
+      week: {
+        sales: 12450,
+        salesGrowth: 15,
+        orders: 328,
+        ordersGrowth: 8,
+        avgPrice: 38,
+        avgPriceGrowth: 6,
+        products: [
+          { name: '农夫山泉 18.9L', category: '大桶水', sales: 1680, percent: 42, trend: 'up' },
+          { name: '农夫山泉 550ml×24', category: '小瓶水', sales: 1260, percent: 28, trend: 'down' },
+          { name: '农夫山泉 12L', category: '大桶水', sales: 980, percent: 18, trend: 'up' },
+          { name: '农夫山泉 4L×6', category: '小瓶水', sales: 710, percent: 12, trend: 'stable' }
+        ],
+        dailySales: [
+          { day: '周一', sales: 1580, percent: 65 },
+          { day: '周二', sales: 1420, percent: 58 },
+          { day: '周三', sales: 1180, percent: 48 },
+          { day: '周四', sales: 1650, percent: 68 },
+          { day: '周五', sales: 1890, percent: 78 },
+          { day: '周六', sales: 2450, percent: 100 },
+          { day: '周日', sales: 2280, percent: 93 }
+        ]
+      },
+      day: {
+        sales: 3842,
+        salesGrowth: 12.5,
+        orders: 47,
+        ordersGrowth: 8.2,
+        avgPrice: 82,
+        avgPriceGrowth: 4,
+        products: [
+          { name: '农夫山泉 18.9L', category: '大桶水', sales: 245, percent: 45, trend: 'up' },
+          { name: '农夫山泉 550ml×24', category: '小瓶水', sales: 180, percent: 33, trend: 'stable' },
+          { name: '农夫山泉 12L', category: '大桶水', sales: 120, percent: 22, trend: 'up' }
+        ],
+        dailySales: [
+          { day: '00-06', sales: 120, percent: 10 },
+          { day: '06-09', sales: 450, percent: 38 },
+          { day: '09-12', sales: 680, percent: 57 },
+          { day: '12-15', sales: 820, percent: 68 },
+          { day: '15-18', sales: 950, percent: 79 },
+          { day: '18-21', sales: 1200, percent: 100 },
+          { day: '21-24', sales: 622, percent: 52 }
+        ]
+      },
+      month: {
+        sales: 48620,
+        salesGrowth: 22,
+        orders: 1280,
+        ordersGrowth: 18,
+        avgPrice: 38,
+        avgPriceGrowth: 3,
+        products: [
+          { name: '农夫山泉 18.9L', category: '大桶水', sales: 6820, percent: 44, trend: 'up' },
+          { name: '农夫山泉 550ml×24', category: '小瓶水', sales: 4980, percent: 32, trend: 'down' },
+          { name: '农夫山泉 12L', category: '大桶水', sales: 3650, percent: 15, trend: 'up' },
+          { name: '农夫山泉 4L×6', category: '小瓶水', sales: 2890, percent: 9, trend: 'stable' }
+        ],
+        dailySales: [
+          { day: '第1周', sales: 10200, percent: 72 },
+          { day: '第2周', sales: 11500, percent: 81 },
+          { day: '第3周', sales: 12450, percent: 88 },
+          { day: '第4周', sales: 14470, percent: 100 }
+        ]
+      }
+    }
+
+    let currentPeriod = 'week'
+
+    function generateInsights(data) {
+      const insights = []
+      
+      if (data.salesGrowth > 10) {
+        insights.push({
+          type: 'success',
+          icon: 'green',
+          title: '销售增长强劲',
+          desc: `销售额环比增长${data.salesGrowth}%，表现优秀，建议保持当前运营策略`
+        })
+      } else if (data.salesGrowth < 0) {
+        insights.push({
+          type: 'danger',
+          icon: 'red',
+          title: '销售下滑预警',
+          desc: `销售额环比下降${Math.abs(data.salesGrowth)}%，建议检查配送服务或竞品动态`
+        })
+      } else {
+        insights.push({
+          type: 'normal',
+          icon: 'blue',
+          title: '销售平稳',
+          desc: `销售额环比增长${data.salesGrowth}%，整体表现稳定`
+        })
+      }
+
+      const topProduct = data.products[0]
+      insights.push({
+        type: 'normal',
+        icon: 'blue',
+        title: `${topProduct.name}销量领先`,
+        desc: `占总销量${topProduct.percent}%，是主力商品，建议确保库存充足`
+      })
+
+      const decliningProducts = data.products.filter(p => p.trend === 'down')
+      if (decliningProducts.length > 0) {
+        insights.push({
+          type: 'warning',
+          icon: 'orange',
+          title: `${decliningProducts[0].name}销量下滑`,
+          desc: '近期销量呈下降趋势，可考虑促销活动或检查价格竞争力'
+        })
+      }
+
+      const peakDay = data.dailySales.reduce((max, d) => d.sales > max.sales ? d : max)
+      insights.push({
+        type: 'normal',
+        icon: 'blue',
+        title: `${peakDay.day}是销售高峰`,
+        desc: `建议提前备货，确保配送人员充足，避免订单积压`
+      })
+
+      const lowDay = data.dailySales.reduce((min, d) => d.sales < min.sales ? d : min)
+      if (lowDay.sales < peakDay.sales * 0.6) {
+        insights.push({
+          type: 'warning',
+          icon: 'orange',
+          title: `${lowDay.day}销量较低`,
+          desc: '可考虑在该时段推出优惠活动，提升销量'
+        })
+      }
+
+      return insights
+    }
+
+    function generateSuggestions(data) {
+      const suggestions = []
+      
+      const peakDay = data.dailySales.reduce((max, d) => d.sales > max.sales ? d : max)
+      suggestions.push(`${peakDay.day}是销售高峰，建议备货量增加20%，配送人员提前安排`)
+
+      const decliningProducts = data.products.filter(p => p.trend === 'down')
+      if (decliningProducts.length > 0) {
+        suggestions.push(`${decliningProducts[0].name}销量下滑，可考虑限时促销或组合优惠`)
+      }
+
+      if (data.avgPrice < 40) {
+        suggestions.push('客单价偏低，可推荐组合套餐或满减活动提升客单价')
+      }
+
+      const bigBucket = data.products.filter(p => p.category === '大桶水')
+      const smallBottle = data.products.filter(p => p.category === '小瓶水')
+      const bigPercent = bigBucket.reduce((sum, p) => sum + p.percent, 0)
+      
+      if (bigPercent > 60) {
+        suggestions.push('大桶水占比高，建议优化小瓶水陈列或推出尝鲜优惠')
+      }
+
+      suggestions.push('定期回访老客户，建立会员体系提升复购率')
+
+      return suggestions
+    }
+
+    function renderInsights(insights) {
+      const container = document.getElementById('insightList')
+      container.innerHTML = insights.map(insight => `
+        <div class="insight-item ${insight.type}">
+          <div class="insight-icon ${insight.icon}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              ${insight.type === 'success' ? '<polyline points="20 6 9 17 4 12"/>' : 
+                insight.type === 'warning' ? '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>' :
+                insight.type === 'danger' ? '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>' :
+                '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>'}
+            </svg>
+          </div>
+          <div class="insight-content">
+            <div class="insight-title">${insight.title}</div>
+            <div class="insight-desc">${insight.desc}</div>
+          </div>
+        </div>
+      `).join('')
+    }
+
+    function renderProducts(products) {
+      const container = document.getElementById('productAnalysis')
+      container.innerHTML = products.map((p, i) => `
+        <div class="product-row">
+          <div class="product-rank ${i < 3 ? 'top' : ''}">${i + 1}</div>
+          <div class="product-info">
+            <div class="product-name">${p.name}</div>
+            <div class="product-meta">${p.category} · 销量 ${p.sales.toLocaleString()}</div>
+          </div>
+          <div class="product-bar">
+            <div class="product-bar-fill" style="width: ${p.percent}%"></div>
+          </div>
+          <div class="product-percent">${p.percent}%</div>
+        </div>
+      `).join('')
+    }
+
+    function renderTimeAnalysis(dailySales) {
+      const container = document.getElementById('timeAnalysis')
+      const maxSales = Math.max(...dailySales.map(d => d.sales))
+      const peakDay = dailySales.reduce((max, d) => d.sales > max.sales ? d : max)
+      const lowDay = dailySales.reduce((min, d) => d.sales < min.sales ? d : min)
+      
+      container.innerHTML = dailySales.map(d => `
+        <div class="day-bar">
+          <div class="day-bar-chart">
+            <div class="day-bar-fill" style="height: ${d.percent}%"></div>
+          </div>
+          <div class="day-label ${d.day === peakDay.day ? 'peak' : d.day === lowDay.day ? 'low' : ''}">${d.day}</div>
+        </div>
+      `).join('')
+    }
+
+    function renderSuggestions(suggestions) {
+      const container = document.getElementById('suggestionList')
+      container.innerHTML = suggestions.map((s, i) => `
+        <div class="suggestion-item">
+          <div class="suggestion-number">${i + 1}</div>
+          <div class="suggestion-text">${s}</div>
+        </div>
+      `).join('')
+    }
+
+    function switchPeriod(period) {
+      currentPeriod = period
+      document.querySelectorAll('.time-tab').forEach(tab => tab.classList.remove('active'))
+      event.target.classList.add('active')
+      
+      const data = mockData[period]
+      
+      document.querySelector('.metric-value').textContent = `¥${data.sales.toLocaleString()}`
+      document.querySelectorAll('.metric-value')[1].textContent = `${data.orders}单`
+      document.querySelectorAll('.metric-value')[2].textContent = `¥${data.avgPrice}`
+      
+      const insights = generateInsights(data)
+      renderInsights(insights)
+      renderProducts(data.products)
+      renderTimeAnalysis(data.dailySales)
+      renderSuggestions(generateSuggestions(data))
+    }
+
+    function exportReport() {
+      const data = mockData[currentPeriod]
+      const insights = generateInsights(data)
+      const suggestions = generateSuggestions(data)
+      
+      let report = `📊 送水站经营分析报告\n`
+      report += `生成时间：${new Date().toLocaleString()}\n\n`
+      report += `━━━━━━━━━━━━━━━━━━━━\n\n`
+      report += `📈 销售概况\n`
+      report += `总销售额：¥${data.sales.toLocaleString()}（环比${data.salesGrowth > 0 ? '+' : ''}${data.salesGrowth}%）\n`
+      report += `订单数：${data.orders}单（环比${data.ordersGrowth > 0 ? '+' : ''}${data.ordersGrowth}%）\n`
+      report += `客单价：¥${data.avgPrice}\n\n`
+      report += `💡 核心洞察\n`
+      insights.forEach(i => {
+        report += `• ${i.title}：${i.desc}\n`
+      })
+      report += `\n🎯 经营建议\n`
+      suggestions.forEach((s, i) => {
+        report += `${i + 1}. ${s}\n`
+      })
+      
+      const blob = new Blob([report], { type: 'text/plain;charset=utf-8' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `经营分析报告_${new Date().toLocaleDateString()}.txt`
+      a.click()
+      URL.revokeObjectURL(url)
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const data = mockData.week
+      renderInsights(generateInsights(data))
+      renderProducts(data.products)
+      renderTimeAnalysis(data.dailySales)
+      renderSuggestions(generateSuggestions(data))
+    })
+  </script>
+</body>
+</html>
