@@ -1,0 +1,10 @@
+flowchart TD
+    phone([手机 App]) --> wifi["同一个 Wi-Fi / 局域网"]
+    laptop["你的电脑<br/>API 服务监听 0.0.0.0:3001"] --> wifi
+    phone --> req["访问你电脑的局域网地址<br/>http://192.168.x.x:3001/chat"]
+    req --> laptop
+    laptop --> proxy["你电脑里的模型代理层<br/>保存 baseUrl / key / model"]
+    proxy --> vendor["外部模型 API"]
+    vendor --> proxy
+    proxy --> laptop
+    laptop --> phone

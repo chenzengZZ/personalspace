@@ -1,0 +1,12 @@
+flowchart LR
+    user([你]) --> browser[浏览器 / 前端页面]
+    browser --> web["本机网页服务<br/>localhost:3000"]
+    web --> api["本机 ASR API<br/>127.0.0.1:3001/asr/info"]
+    api --> logic["local-asr.ts<br/>路径判断 / 状态判断"]
+    logic --> cli["whisper-cli.exe<br/>真正执行转录"]
+    logic --> model["模型文件<br/>ggml-base.bin"]
+    model --> cli
+    cli --> logic
+    logic --> api
+    api --> web
+    web --> browser

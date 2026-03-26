@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>本地服务与网络图解</title>
+  <meta name="description" content="用两张图讲清楚本地 ASR 链路，以及手机如何通过你的电脑调用模型 API。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07070b;
+      --bg-card: rgba(17, 17, 17, 0.78);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f8fafc;
+      --text-secondary: #9aa4b2;
+      --accent: #e11d48;
+      --accent-soft: rgba(225, 29, 72, 0.12);
+      --font-display: "Space Grotesk", sans-serif;
+      --font-body: "Archivo", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse 70% 48% at 50% -10%, rgba(30, 27, 75, 0.38) 0%, transparent 50%),
+        radial-gradient(ellipse 55% 35% at 82% 48%, rgba(225, 29, 72, 0.09) 0%, transparent 48%),
+        var(--bg);
+      font-family: var(--font-body);
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .shell {
+      width: min(1220px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 36px 0 96px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+      padding: 16px 18px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(9, 9, 11, 0.82);
+      backdrop-filter: blur(16px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-display);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-mark {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent) 0%, #ff6b8a 100%);
+      box-shadow: 0 0 14px rgba(225, 29, 72, 0.5);
+    }
+
+    .top-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+      transition: 0.3s ease;
+    }
+
+    .top-link:hover {
+      color: var(--text);
+      border-color: rgba(225, 29, 72, 0.32);
+      background: rgba(225, 29, 72, 0.1);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.16fr) minmax(280px, 0.84fr);
+      gap: 20px;
+      margin-bottom: 22px;
+    }
+
+    .hero-main,
+    .hero-side {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero-main {
+      position: relative;
+      overflow: hidden;
+      padding: 34px 34px 30px;
+    }
+
+    .hero-main::after {
+      content: "";
+      position: absolute;
+      inset: auto -18% -42% auto;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(225, 29, 72, 0.15) 0%, rgba(225, 29, 72, 0) 72%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      color: var(--accent);
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 10ch;
+      font-family: var(--font-display);
+      font-size: clamp(2.3rem, 6vw, 4rem);
+      line-height: 1.04;
+      letter-spacing: -0.05em;
+      text-wrap: balance;
+    }
+
+    .hero-copy {
+      max-width: 56ch;
+      margin: 18px 0 0;
+      color: var(--text-secondary);
+      font-size: 1.02rem;
+    }
+
+    .hero-side {
+      padding: 22px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .info-card {
+      padding: 18px 16px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .info-card span {
+      display: inline-block;
+      margin-bottom: 8px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .info-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--bg-card);
+      overflow: hidden;
+    }
+
+    .card-head {
+      padding: 24px 24px 18px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0) 100%);
+    }
+
+    .card-head h2 {
+      margin: 0 0 8px;
+      font-family: var(--font-display);
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      letter-spacing: -0.03em;
+    }
+
+    .card-head p {
+      margin: 0;
+      color: var(--text-secondary);
+    }
+
+    .card-body {
+      padding: 22px 24px 26px;
+    }
+
+    .diagram-shell {
+      padding: 18px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      overflow: auto;
+    }
+
+    .diagram-shell img {
+      display: block;
+      width: 100%;
+      min-width: 760px;
+      height: auto;
+    }
+
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .legend-card {
+      padding: 14px 14px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .legend-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-family: var(--font-display);
+      font-size: 0.96rem;
+      color: var(--text);
+    }
+
+    .legend-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+    }
+
+    .note {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(225, 29, 72, 0.24);
+      background: var(--accent-soft);
+      color: var(--text);
+    }
+
+    .note strong {
+      font-family: var(--font-display);
+    }
+
+    @media (max-width: 980px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .shell {
+        width: min(100vw - 20px, 100% - 20px);
+        padding-top: 22px;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero-main {
+        padding: 26px 22px 24px;
+      }
+
+      .hero-side,
+      .card-body,
+      .card-head {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .legend {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="topbar">
+      <div class="brand">
+        <span class="brand-mark"></span>
+        <span>Network Explain Visuals</span>
+      </div>
+      <a class="top-link" href="/">返回首页</a>
+    </div>
+
+    <section class="hero">
+      <div class="hero-main">
+        <div class="eyebrow">Local Services / LAN / Model Proxy</div>
+        <h1>把你现在这套网络，真的看懂</h1>
+        <p class="hero-copy">这页不堆术语，直接拿你现在正在做的两条链路来讲：第一条是本地 Whisper / ASR；第二条是手机通过你的电脑拿模型能力。图是渲染过的，不再是纯文字 Mermaid 代码。</p>
+      </div>
+      <aside class="hero-side">
+        <div class="info-card">
+          <span>图一</span>
+          <p>浏览器、网页服务、ASR API、本地逻辑、whisper 可执行文件、模型文件之间的关系。</p>
+        </div>
+        <div class="info-card">
+          <span>图二</span>
+          <p>手机和电脑在同一个 Wi‑Fi 下时，手机如何通过你电脑上的代理服务去调用外部模型 API。</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="stack">
+      <article class="card">
+        <div class="card-head">
+          <h2>图一：你现在的本地 ASR / Whisper 链路</h2>
+          <p>这条链路里，网络其实没有出你电脑。只是你电脑里的几个不同服务，在不同端口上互相说话。</p>
+        </div>
+        <div class="card-body">
+          <div class="diagram-shell">
+            <img src="/diagrams/asr-local-flow.svg" alt="本地 ASR Whisper 链路图" />
+          </div>
+          <div class="legend">
+            <div class="legend-card">
+              <strong>localhost:3000</strong>
+              <p>这是本机网页服务的地址。浏览器找的是你自己电脑上的网页。</p>
+            </div>
+            <div class="legend-card">
+              <strong>127.0.0.1:3001</strong>
+              <p>这是本机 ASR API 的地址。网页再去问这个接口：ASR 现在能不能用。</p>
+            </div>
+            <div class="legend-card">
+              <strong>local-asr.ts</strong>
+              <p>这是判断层。它负责看路径、找二进制、找模型文件，再决定状态。</p>
+            </div>
+            <div class="legend-card">
+              <strong>whisper-cli.exe + 模型</strong>
+              <p>这是执行层。前者是工具程序，后者是模型本体，缺一个都跑不起来。</p>
+            </div>
+          </div>
+          <div class="note"><strong>关键一句：</strong> 这条链路的本质，不是“互联网服务”，而是“你电脑里几个带门牌号的房间在互相说话”。</div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <h2>图二：手机通过你的电脑拿模型能力</h2>
+          <p>这里你的电脑不只是运行前端，而是在扮演一个真正的服务端中间层。手机不直接拿 key，而是把请求先发给你的电脑。</p>
+        </div>
+        <div class="card-body">
+          <div class="diagram-shell">
+            <img src="/diagrams/phone-pc-model-flow.svg" alt="手机通过电脑调用模型 API 图" />
+          </div>
+          <div class="legend">
+            <div class="legend-card">
+              <strong>手机不能写 localhost</strong>
+              <p>手机上的 localhost 指向手机自己，不是你的电脑。手机要访问的是你电脑的局域网 IP。</p>
+            </div>
+            <div class="legend-card">
+              <strong>为什么电脑当中间层</strong>
+              <p>因为 key、baseUrl、model 都放在你电脑上更安全，手机只调用你自己的服务。</p>
+            </div>
+            <div class="legend-card">
+              <strong>同一个 Wi‑Fi</strong>
+              <p>这是最简单的阶段。手机和电脑在同一局域网里，手机通过 <code>192.168.x.x:端口</code> 找到电脑。</p>
+            </div>
+            <div class="legend-card">
+              <strong>再往后才是穿透和 DNS</strong>
+              <p>只有当手机不在同一个 Wi‑Fi，或者你想让外网也能访问时，才需要再讲内网穿透和域名。</p>
+            </div>
+          </div>
+          <div class="note"><strong>关键一句：</strong> 这条链路里，你的电脑已经不是“用模型的人”，而是在“给别人提供模型能力”。这就是服务端角色。</div>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
